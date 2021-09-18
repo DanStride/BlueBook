@@ -1,0 +1,98 @@
+﻿<Window x:Class="BlueBook.View.DictionaryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BlueBook.View"
+        xmlns:vm="clr-namespace:BlueBook.ViewModel"
+        mc:Ignorable="d"
+        Title="DictionaryWindow" Height="450" Width="800">
+    <Window.Resources>
+        <vm:DictionaryWindowViewModel x:Key="vm" />
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="100" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="0"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="1"
+                    Grid.RowSpan="3"
+                    Background="Gray">
+        </StackPanel>
+
+        <Label Grid.Column="1"
+               Grid.Row="0"
+               Content="Relational Dictionary"
+               Style="{StaticResource PageHeader}">
+        </Label>
+
+        <StackPanel Grid.Column="1"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="1">
+            <Label Content="Word" />
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="primaryWordTextBox"
+                         Text="{Binding Path=PrimaryWord}"
+                         MinWidth="200"/>
+                <TextBox x:Name="primarySubStringTextBox"
+                         MinWidth="200"
+                         Text="{Binding Path=PrimarySubString}"/>
+            </StackPanel>
+            <TextBox x:Name="dbEntryTextBox"
+                     Text="{Binding Path=EntireEntry}"/>
+            <Label Content="Relationships for word" />
+            <ListView Height="100"
+                      x:Name="wordRelationshipsListView"
+                      ItemsSource="{Binding Path=WordRelationshipsList}">
+
+
+            </ListView>
+            <Label Content="New word to relate with" />
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding Path=SecondaryWord}"
+                         x:Name="secondaryWordTextBox"
+                         MinWidth="200"/>
+                <TextBox x:Name="secondarySubStringTextBox"
+                         MinWidth="200"
+                         Text="{Binding Path=SecondarySubString}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="addRelationshipButton"
+                        Content="Add Relationship"
+                        Command="{Binding AddNewRelationCommand}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <TextBox Grid.Column="1"
+                 Grid.Row="2"
+                 Text="Clipboard" />
+
+        <StackPanel Grid.Column="2"
+                    Grid.Row="1">
+            <Button Content="Search"
+                    x:Name="searchButton"
+                    Command="{Binding FindWordInDictionaryCommand}"/>
+            <Button Content="Add" />
+            <Button Content="Create DB"
+                    x:Name="createDbButton"
+                    Click="createDbButton_Click"/>
+            <Button Content="Create AlphabetDB"
+                    x:Name="createAlphabetDB"
+                    Click="createAlphabetDB_Click" />
+        </StackPanel>
+
+        <Button Content="Send to Editor"
+                Grid.Column="2"
+                Grid.Row="2" />
+    </Grid>
+</Window>
