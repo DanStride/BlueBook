@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using BlueBook.Model;
+using BlueBook.Static_Classes;
 using SQLite;
 
 namespace BlueBook.Helpers
@@ -81,11 +82,10 @@ namespace BlueBook.Helpers
         {
             _db.Query<AlphabetDBModel>("DROP TABLE IPAlphabet");
             _db.CreateTable<AlphabetDBModel>();
-            AlphabetIPA aipa = new AlphabetIPA();
             AlphabetDBModel model = new AlphabetDBModel();
 
 
-            foreach (var item in aipa.ipaChars)
+            foreach (var item in IPAlphabet.ipaChars)
             {
                 model.id = item.charId;
                 model.character = item.character.ToString();

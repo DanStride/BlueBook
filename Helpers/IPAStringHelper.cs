@@ -1,4 +1,5 @@
 ﻿using BlueBook.Model;
+using BlueBook.Static_Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +11,8 @@ namespace BlueBook.Helpers
 {
     public static class IPAStringHelper
     {
+        public static Encoding utf16 = Encoding.Unicode;
+
         public static string CleanIPA(this string line)
         {
             while (line.Contains("ˈ"))
@@ -27,13 +30,12 @@ namespace BlueBook.Helpers
 
         public static List<string> SplitWordsIntoList(string words)
         {
+            // TODO: FIX NULL INPUT (probably earlier than here)
             return words.Split(" ").ToList();
         }
 
         public static List<string> GetStringListFromByteList(List<byte[]> bytes)
         {
-            Encoding utf16 = Encoding.Unicode;
-
             List<string> stringList = new List<string>();
 
             foreach (var byteset in bytes)
@@ -46,142 +48,154 @@ namespace BlueBook.Helpers
             return stringList;
         }
 
-        public static List<byte[]> GetByteListFromString(string word)
+        public static string GetStringFromByteArray(byte[] bytes)
         {
+            string character = utf16.GetString(bytes);
 
-            Encoding utf16 = Encoding.Unicode;
-            AlphabetIPA aipa = new AlphabetIPA();
+            return character;
+        }
 
-            List<int> tempWordBytesInList = new List<int>();
-            List<byte[]> finishedBytesInList = new List<byte[]>();
+        public static List<int> GetIntListFromByteArray(byte[] bytes)
+        {
+            List<int> newIntList = new List<int>();
 
-            // Get necessary length for byte array
-            int byteCount = utf16.GetByteCount(word);
-
-            // Instantiate new byte array
-            Byte[] wordBytes = new Byte[byteCount];
-
-            // Populate byte array 
-            wordBytes = utf16.GetBytes(word);
-
-            // Populate Byte List
-            foreach (var b in wordBytes)
+            foreach (var b in bytes)
             {
-                tempWordBytesInList.Add(b);
+                newIntList.Add(b);
             }
 
-            // WTF IS THIS?
-            byte[] testbytes = new byte[] { 108, 0 };
-            string test = utf16.GetString(testbytes);
+            return newIntList;
+        }
 
-            // FIND LARGEST PIECES FIRST, 3 PASSES
+        public static List<int> RemoveThirteenThirtyTwoFromBeginningOfIntList(List<int> intList)
+        {
+            List<int> newList = intList;
 
-            // iterate byte[] to get it into an array or list
+            if ((newList[0] == 13) && (newList[1] == 32))
+            {
+                newList.RemoveRange(0, 2);
+            }
 
-            // find all instances of a match on the first byte
-            // check byte size of letter for each match
-            // check the rest of the matches for that size
-            // if ok, add to list list int the bytes
+            return newList;
+        }
 
+        public static bool ParallelByteCheck(int counter, List<int> alphabetChar, List<int> wordChar)
+        {
+            bool isMatch = true;
 
+            for (int p = 0; p < counter; p++)
+            {
+                if (alphabetChar[p] != wordChar[p])
+                {
+                    isMatch = false;
+                    break;
+                }
+            }
 
-            while (tempWordBytesInList.Count > 0)
+            return isMatch;
+        }
+
+        public static List<byte[]> GetByteListFromIPAString(string ipaString)
+        {
+            List<byte[]> finishedBytesInList = new List<byte[]>();
+            byte [] ipaBytes = utf16.GetBytes(ipaString);
+            List<int> tempIPABytesInList = GetIntListFromByteArray(ipaBytes);
+            List<int> currentMatch = new List<int>();
+
+            while (tempIPABytesInList.Count > 0)
             {
                 bool isMatch = true;
-                CharacterIPA currentMatch = new CharacterIPA();
 
-                // Check for the mysterious 13, 32 empty char
-                if ((tempWordBytesInList[0] == 13) && (tempWordBytesInList[1] == 32))
+                tempIPABytesInList = RemoveThirteenThirtyTwoFromBeginningOfIntList(tempIPABytesInList);
+
+                var characterMatches = from c in IPAlphabet.ipaChars
+                                       where c.unicodeBytesAsIntList[0] == tempIPABytesInList[0]
+                                       orderby c.unicodeBytesAsIntList[0] descending
+                                       select c;
+
+                List<CharacterIPA> listCharIPA = characterMatches.ToList();
+
+
+                if (listCharIPA.Count == 0)
                 {
-                    tempWordBytesInList.RemoveRange(0, 2);
+                    MessageBox.Show("Error: No characterMatches found!");
                 }
 
-                // Find all matches with same first byte
-                var alphabetMatches = aipa.ipaChars.Where(a => a.unicodeBytesAsIntList.First().Equals(tempWordBytesInList[0]))
-                                        .OrderByDescending(c => c.unicodeBytes.Length)
-                                        .ToList();
-
-                if (alphabetMatches.Count > 0)
+                foreach (var match in characterMatches)
                 {
-                    foreach (var match in alphabetMatches)
+                    if (match.unicodeBytesAsIntList.Count == 6 && tempIPABytesInList.Count >= 6)
                     {
-                        isMatch = true;
-                        if (match.unicodeBytes.Length == 6 && tempWordBytesInList.Count >= 6)
+                        if (isMatch = ParallelByteCheck(6, match.unicodeBytesAsIntList, tempIPABytesInList))
                         {
-                            // Check remainder of byte matches starting with the larger possibilities
-                            for (int p = 0; p < 6; p++)
-                            {
-                                // Checking chars against the zeroeth index and up of the word
-                                if (match.unicodeBytesAsIntList[p] != tempWordBytesInList[p])
-                                {
-                                    isMatch = false;
-                                    break;
-                                }
-                            }
-                        }
-                        else if (match.unicodeBytes.Length == 4 && tempWordBytesInList.Count >= 4)
-                        {
-
-                            for (int p = 0; p < 4; p++)
-                            {
-                                // Checking chars against the zeroeth index and up of the word
-                                if (match.unicodeBytesAsIntList[p] != tempWordBytesInList[p])
-                                {
-                                    isMatch = false;
-                                    break;
-                                }
-                            }
-                        }
-                        else if (match.unicodeBytes.Length == 2)
-                        {
-                            for (int p = 0; p < 2; p++)
-                            {
-                                // Checking chars against the zeroeth index and up of the word
-                                if (match.unicodeBytesAsIntList[p] != tempWordBytesInList[p])
-                                {
-                                    isMatch = false;
-                                    break;
-                                }
-                            }
-                        }
-                        else if (match.unicodeBytes.Length > tempWordBytesInList.Count)
-                        {
-                            isMatch = false;
-                        }
-
-                        if (isMatch)
-                        {
-                            currentMatch = match;
+                            currentMatch = match.unicodeBytesAsIntList;
                             break;
                         }
-
                     }
-
-                    if (isMatch && currentMatch != null)
+                    else if (match.unicodeBytesAsIntList.Count == 4 && tempIPABytesInList.Count >= 4)
                     {
-                        finishedBytesInList.Add(currentMatch.unicodeBytes);
-
-                        tempWordBytesInList.RemoveRange(0, currentMatch.unicodeBytes.Length);
+                        if (isMatch = ParallelByteCheck(4, match.unicodeBytesAsIntList, tempIPABytesInList))
+                        {
+                            currentMatch = match.unicodeBytesAsIntList;
+                            break;
+                        }
                     }
-
-                    else
+                    else if (match.unicodeBytesAsIntList.Count == 2)
                     {
-                        MessageBox.Show("there were no unicode byte matches. Something went wrong");
+                        if (isMatch = ParallelByteCheck(2, match.unicodeBytesAsIntList, tempIPABytesInList))
+                        {
+                            currentMatch = match.unicodeBytesAsIntList;
+                            break;
+                        }
                     }
                 }
-                else
+
+                if (isMatch)
                 {
-                    MessageBox.Show("There was no byte match found for the next character, something went wrong.");
+                    finishedBytesInList.Add(GetByteArrayFromIntList(currentMatch));
+                    tempIPABytesInList.RemoveRange(0, currentMatch.Count);
+                }
+                else if (!isMatch)
+                {
+                    MessageBox.Show("Error: No Byte Match Found!");
                 }
 
             }
-
             return finishedBytesInList;
+        }
+
+        public static byte[] GetByteArrayFromIntList(List<int> intList)
+        {
+            byte[] newByte = intList.Select(i => (byte) i).ToArray();
+
+            return newByte;
         }
 
         public static List<string> GetStringListFromString(string word)
         {
-            return GetStringListFromByteList(GetByteListFromString(word));
+            return GetStringListFromByteList(GetByteListFromIPAString(word));
+        }
+
+        public static string GetIPAStringFromDictionaryIPAList(List<DictionaryIPA> list)
+        {
+            string ipaString = "";
+
+            foreach (var word in list)
+            {
+                ipaString = $"{ipaString}{String.Concat(IPAStringHelper.GetStringListFromString(word.ipa1))}";
+            }
+
+            return ipaString;
+        }
+
+        public static byte[] GetByteArrayFromString(string charString)
+        {
+            int byteCount = utf16.GetByteCount(charString);
+
+            Byte[] wordBytes = new Byte[byteCount];
+
+            wordBytes = utf16.GetBytes(charString);
+
+            return wordBytes;
         }
 
     }

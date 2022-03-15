@@ -9,37 +9,29 @@ namespace BlueBook.Model
 {
     public class Phrase
     {
-        DataRepo _dr;
-        private AlphabetIPA aipa = new AlphabetIPA();
+        // THINK ABOUT RENAMING THIS CLASS
 
-        private string enteredPhrase;
-        public string EnteredPhrase
+        private DataRepo _dr;
+
+
+        // MAYBE THE SAME FOR MATCH RULES, ACTUALLY MATCH RULES SHOULD COME FROM A DB WITH FUNCTIONALITY TO MODIFY FROM WITHIN PROGRAM
+        private MatchRules mr;
+
+        private string enteredPhraseAsString;
+        public string EnteredPhraseAsString
         {
-            get { return enteredPhrase; }
-            set { enteredPhrase = value; }
+            get { return enteredPhraseAsString; }
+            set { enteredPhraseAsString = value; }
         }
 
 
-        private string convertedPhrase;
-        public string ConvertedPhrase
+        private List<DictionaryIPA> phraseAsListOfDictionaryIPA;
+        public List<DictionaryIPA> PhraseAsListOfDictionaryIPA
         {
-            get { return convertedPhrase; }
-            set { convertedPhrase = value; }
+            get { return phraseAsListOfDictionaryIPA; }
+            set { phraseAsListOfDictionaryIPA = value; }
         }
 
-        private List<DictionaryIPA> wordsIPAList;
-        public List<DictionaryIPA> WordsIPAList
-        {
-            get { return wordsIPAList; }
-            set { wordsIPAList = value; }
-        }
-
-        private List<string> phraseIPAList;
-        public List<string> PhraseIPAList
-        {
-            get { return phraseIPAList; }
-            set { phraseIPAList = value; }
-        }
 
         private List<MatchedWord> matchedWords = new List<MatchedWord>();
         public List<MatchedWord> MatchedWords
@@ -51,66 +43,59 @@ namespace BlueBook.Model
 
         char[] splitChars = { ' ' };
 
-        private List<DictionaryIPA> dbList = new List<DictionaryIPA>();
+        private List<DictionaryIPA> dbList;
 
-        public int indexLength;
+
 
         public string ipaString = "";
 
+        private int finalIndex;
 
-
-
-        public Phrase(string phrase)
+        public int FinalIndex
         {
-            EnteredPhrase = phrase;
-            _dr = new DataRepo();
-            WordsIPAList = new List<DictionaryIPA>();
-            dbList = _dr.GetEntireDictionaryIPAList();
+            get { return finalIndex; }
+            set { finalIndex = value; }
         }
 
-        public void AddWordsToWordsIPAList()
+        private List<string> alternatePhraseIPAs;
+
+        public List<string> AlternatePhraseIPAs
+
         {
-            List<string> wordList = IPAStringHelper.SplitWordsIntoList(EnteredPhrase);
+            get { return alternatePhraseIPAs; }
+            set { alternatePhraseIPAs = value; }
+        }
+
+        private Dictionary<string, bool> selectionOptions;
+
+        public Dictionary<string, bool> SelectionOptions
+        {
+            get { return selectionOptions; }
+            set { selectionOptions = value; }
+        }
+
+        public List<byte[]> matchRuleSet { get; set; }
+
+
+        public Phrase(string phrase, Dictionary<string, bool> selectOptions)
+        {
+            EnteredPhraseAsString = phrase;
+            _dr = new DataRepo();
+            PhraseAsListOfDictionaryIPA = new List<DictionaryIPA>();
+            dbList = _dr.GetEntireDictionaryIPAList();
+            AlternatePhraseIPAs = new List<string>();
+            SelectionOptions = selectOptions;
+            mr = new MatchRules(selectionOptions);
+        }
+
+
+        public void PopulatePhraseAsListOfDictionaryIPA()
+        {
+            List<string> wordList = IPAStringHelper.SplitWordsIntoList(EnteredPhraseAsString);
 
             for (int i = 0; i < wordList.Count; i++)
             {
-                if (_dr.VerifyExistenceOfWord(wordList[i]))
-                {
-                    WordsIPAList.Add(_dr.GetSingleEntry($"SELECT * FROM DictionaryIPA WHERE English = '{wordList[i]}'"));
-                }
-                else
-                {
-                    MessageBox.Show($"{wordList[i]} does not exist in the database");
-                }
-            }
-
-        }
-
-        public void GetIndexLengthForPhrase()
-        {
-            indexLength = IPAStringHelper.GetByteListFromString(ipaString).Count;
-        }
-
-        public string GetIPAStringFromWordsIPAList()
-        {
-
-            foreach (var word in WordsIPAList)
-            {
-                ipaString = $"{ipaString} {String.Concat(IPAStringHelper.GetStringListFromString(word.ipa1))}";
-            }
-
-            return ipaString;
-        }
-        public void ConvertPhraseToIPAChars()
-        {
-            // put words into array
-            string[] wordsEnglish = EnteredPhrase.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
-
-            // get ipa from dictionary
-
-            for (int i = 0; i < wordsEnglish.Length; i++)
-            {
-                WordsIPAList.Add(_dr.GetSingleEntry($"SELECT * FROM DictionaryIPA WHERE English = '{wordsEnglish[i]}'"));
+                PhraseAsListOfDictionaryIPA.Add(_dr.GetSingleEntry($"SELECT * FROM DictionaryIPA WHERE English = '{wordList[i]}'"));
             }
         }
 
@@ -119,132 +104,28 @@ namespace BlueBook.Model
             MatchedWords.Add(new MatchedWord(word, index));
         }
 
-        public void SearchForMatches()
-        {
-            // I THINK I SHOULD REWRITE THIS ENTIRE METHOD
-            List<AmbiguityResults> ambiguityResults = new List<AmbiguityResults>();
-            List<DictionaryIPA> wordsToRemove = new List<DictionaryIPA>();
 
-            List<byte[]> phraseByteList = new List<byte[]>();
-            List<string> phraseStringList = new List<string>();
-
-            List<DictionaryIPA> wordList = new List<DictionaryIPA>();
-            List<byte[]> wordByteList = new List<byte[]>();
-
-
-            foreach (var word in WordsIPAList)
-            {
-                phraseByteList.AddRange(IPAStringHelper.GetByteListFromString(word.ipa1));
-            }
-
-            phraseStringList = IPAStringHelper.GetStringListFromByteList(phraseByteList);
-
-            wordList = _dr.GetListOfWords($"SELECT * FROM DictionaryIPA WHERE IPA1 LIKE '%{phraseStringList[0]}%'");
-
-            
-
-            for (int i = 0; i < wordList.Count; i++)
-            {
-                List<int> currentIndexList = new List<int>(); 
-                bool isAMatch = true;
-
-                wordByteList = IPAStringHelper.GetByteListFromString(wordList[i].ipa1);
-
-                for (int p = 0; p < phraseByteList.Count; p++)                                                  // STARTING INSIDE THE PHRASE
-                {
-                    for (int w = 0; w < wordByteList.Count; w++)                                                // MOVING THOUGH THE WORD 
-                    {
-                        if (BytesMatch(phraseByteList[p], wordByteList[w]))                                     // IF IT MATCHES
-                        {
-                            isAMatch = true;
-                            // ADD START INDEX TO MATCHEDWORD HERE
-                            currentIndexList.Add(p);
-
-                            if (phraseByteList.Count - p > wordByteList.Count - w)                              // CHECK WHICH LIST IS LONGER, WANT TO INTERATE THROUGH THE SMALLER ONE. MINUS INDEX FOR WHAT LETTER WE ARE UP TO
-                            {
-                                // PHRASE IS LONGER SO THIS IS EITHER A START TO END OR MIDDLE TO END WORD
-                                for (int x = 0; x < wordByteList.Count - w; x++)                                // CHECK THE REMAINDER OF THE WORD FOR MATCHES
-                                {
-                                    if (!BytesMatch(phraseByteList[p + x], wordByteList[w + x]))                // IF THE REMAINDER OF THE WORD DOES NOT MATCH, IS NOT MATCH, BREAK LOOP
-                                    {
-                                        isAMatch = false;
-                                        currentIndexList.Add(-1);
-                                        // MOVES TO NEXT LETTER OF WORD
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        currentIndexList.Add(p + x);
-                                    }
-                                    
-                                }
-                            }
-                            else if (wordByteList.Count - w > phraseByteList.Count - p)
-                            {
-                                // WORD IS LONGER SO THIS IS EITHER A START TO MIDDLE OR MIDDLE TO MIDDLE WORD
-                                for (int x = 0; x < phraseByteList.Count - p; x++)
-                                {
-                                    if (!BytesMatch(phraseByteList[p + x], wordByteList[w + x]))
-                                    {
-                                        isAMatch = false;
-                                        currentIndexList.Add(-1);
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        currentIndexList.Add(p + x);
-                                    }
-                                }
-                            }
-                            if (isAMatch)
-                            {
-                                AddMatchedWord(wordList[i], currentIndexList);
-                                goto NextWord;
-                            }
-
-                        }
-                        else
-                        {
-                            currentIndexList.Add(-1);
-                        }
-                    }
-                }
-
-
-            //if (!isAMatch)
-            //{
-            //    wordsToRemove.Add(wordList[i]);
-            //}
-            NextWord:;
-            }
-
-            //wordList = wordList.Except(wordsToRemove).ToList();
-
-        }
 
         public void FindMatches()
         {
-            //phrase entered
-            //add words to ipa list
-            //search for matches
+            // NEEDS SEPARATION, THIS SHOULD REALLY BE THE TEMPLATE METHOD THAT CALLS ALL THE OTHER STEPS
+            // SHOULD RETURN RESULTS OBJECT/LIST
 
-            //get list of byte[] from entered phrase
 
-            //get list of list of byte[] from words
-
-            //query db and return all results with first byte[] and then remove entries
-            // OR
-            //query db and check line by line
             string ipaString = "";
 
-            foreach (var word in WordsIPAList)
+            // CALL METHOD GetIPAStringFromWordsIPAList
+            foreach (var word in PhraseAsListOfDictionaryIPA)
             {
                 ipaString = $"{ipaString}{String.Concat(IPAStringHelper.GetStringListFromString(word.ipa1))}";
             }
 
             // This can be set once
             List<byte[]> phraseBytes = new List<byte[]>();
-            phraseBytes = IPAStringHelper.GetByteListFromString(ipaString);
+            phraseBytes = IPAStringHelper.GetByteListFromIPAString(ipaString);
+
+
+            FinalIndex = phraseBytes.Count - 1;
 
             // This needs to be reset for each db entry
             List<byte[]> wordBytes = new List<byte[]>();
@@ -252,25 +133,50 @@ namespace BlueBook.Model
             //Open DB connection
             //Heaps quicker to return entire db as a collection rather than query one word at a time
             
+            // EXTRACT METHOD FINDFIRSTWORDMATCHES
             for (int i = 0; i < dbList.Count; i++)
             {
                 // NEED TO ADD MATCHEDWORD HERE AND ALSO ADD DICTIONARYIPA
-                wordBytes = IPAStringHelper.GetByteListFromString(dbList[i].ipa1);
+                wordBytes = IPAStringHelper.GetByteListFromIPAString(dbList[i].ipa1);
 
                 if (CheckForMatch(phraseBytes, wordBytes).ByteArrayList.Count > 0)
                 {
                     MatchedWord match = CheckForMatch(phraseBytes, wordBytes);
+
                     match.Word = dbList[i];
-                    MatchedWords.Add(match);
+
+                    if (match.Indexing.Count > 0 && CheckMatchActuallyHasMatches(match))
+                    {
+                        MatchedWords.Add(match);
+                    }
                 }
                 
             }
 
         }
 
+        
+
+        private bool CheckMatchActuallyHasMatches(MatchedWord matchedWord)
+        {
+            // USEFUL CHECK BUT REALLY SHOULD BE TAKEN CARE OF EARLIER ON IN THE PROCESS
+
+            bool hasMatch = false;
+            for (int i = 0; i < matchedWord.Indexing.Count; i++)
+            {
+                if (matchedWord.Indexing[i] != -1)
+                {
+                    hasMatch = true;
+                    break;
+                }
+            }
+            return hasMatch;
+        }
 
         public MatchedWord CheckForMatch(List<byte[]> phrase, List<byte[]> word)
         {
+            // TOO LONG, NEED TO SEPARATE.
+
             MatchedWord match = new MatchedWord();
             // !!! ITERATION NEEDS TO START ON THE WORD AND NOT THE PHRASE
             for (int wi = 0; wi < word.Count; wi++)
@@ -278,6 +184,8 @@ namespace BlueBook.Model
                 // By the time word index has increased + 1 it can no longer be a trailing word therefore
                 // the index wi when == 1 and above it MUST match on a pi == 0 or not at all
                 if (wi != 0)
+
+                    // EXTRACT METHOD AS LEADINGWORDMATCHCHECK
                 {
                     if (BytesMatch(phrase[0], word[wi]))
                     {
@@ -287,13 +195,16 @@ namespace BlueBook.Model
                         {
                             // Add matched word to list of matched words
                             match = ParallelMatchCheck(phrase, word, 0, wi);
-                            // Add a GOTO HERE to exit loop and stop it from adding lip 3 times
+                            // Add a GOTO HERE to exit loop and stop it from adding lip 3 times                            << could be missing something here
                             goto Exit;
                         }
                     }
                 }
                 else
                 {
+
+                    // EXTRACT METHOD AS FOLLOWINGWORD MATCH CHECK
+
                     for (int pi = 0; pi < phrase.Count; pi++)
                     {
                         if (BytesMatch(phrase[pi], word[wi]))
@@ -304,7 +215,7 @@ namespace BlueBook.Model
                             {
                                 // Add matched word to list of matched words
                                 match = ParallelMatchCheck(phrase, word, pi, wi);
-                                // Add a GOTO HERE to exit loop and stop it from adding lip 3 times
+                                // Add a GOTO HERE to exit loop and stop it from adding lip 3 times                       << could be missing something here
                                 goto Exit;
                             }
                         }
@@ -317,15 +228,23 @@ namespace BlueBook.Model
 
         public MatchedWord ParallelMatchCheck(List<byte[]> phrase, List<byte[]> word, int phraseIndex, int wordIndex)
         {
+            // TOO LONG, SEPARATE
+
             MatchedWord match = new MatchedWord(word);
             match.isMatch = true;
 
+            // ADD EXPLANATION VARIABLE WORDISLONGERTHANPHRASE
+
+
             if(phrase.Count - phraseIndex > word.Count - wordIndex)
             {
-                // Word is shorter than phrase so check to end of word and the remainder of word will have -1 indexes. Leading or trailing? Decide on terminology.
+                // Word is shorter than phrase so check to end of word and the remainder of word will have -1 indexes. Leading or trailing? Decide on terminology.                   << phrase is longer than word, should be no remainder
                 // This doesn't need to add -1s anywhere because if it doesn't match entirely to the end of the word, it is not a match.
                 // I THINK THIS IS CORRECT
-                for (int i = 1; i < word.Count - wordIndex; i++)
+
+                // EXTRACT METHOD OUT, RETURN MATCH
+
+                for (int i = 0; i < word.Count - wordIndex; i++)
                 {
                     if (!BytesMatch(phrase[i + phraseIndex], word[i + wordIndex]))
                     {
@@ -345,6 +264,10 @@ namespace BlueBook.Model
             {
                 // Phrase is shorter than or equal to Word
                 // This one does or does not need -1s? I think neither of them do
+                // 
+
+                // EXTRACT METHOD OUT, RETURN MATCH
+
                 for (int i = 0; i < phrase.Count - phraseIndex; i++)
                 {
 
@@ -366,64 +289,51 @@ namespace BlueBook.Model
 
         private bool BytesMatch(byte[] phrase, byte[] word)
         {
-            return phrase.SequenceEqual(word);
+            bool byteMatch = false;
+
+            if (!SelectionOptions.ContainsValue(true))
+            {
+                byteMatch = phrase.SequenceEqual(word);
+            }
+            else
+            {
+                byteMatch = BytesMatchOnAmbiguity(phrase, word);
+            }
+
+            return byteMatch;
         }
 
-        private void GetPhraseIPAList()
+        private bool BytesMatchOnAmbiguity(byte[] phrase, byte[] word)
         {
-            string concat = String.Concat(WordsIPAList);
-            List<string> listOfCharsIPA = new List<string>();
+            bool byteMatch = false;
 
-            //check first char,
-            //if first char is equal to any one of the "double char" chars then check next char
-            //if next char is equal to second one of "double chars" then treat that double char as single char and act accordingly
-            //add to array, remove from concat
+            string phraseAsCharString = IPAStringHelper.GetStringFromByteArray(phrase);
 
-            while (concat.Length > 0)
+            if (SelectionOptions["AmbiguousConsonants"] == true && AmbiguityRules.allConsonants.Contains(phraseAsCharString))
             {
-                // find all chars that match the start of concat
-                var query = from c in aipa.ipaChars
-                            where concat.StartsWith(c.character)
-                            select c;
 
-                var charMatches = query.ToList();
-                
-                
-                if (charMatches.Count > 1)
+                if (mr.IsAmbiguousConsonantMatch(phraseAsCharString, word))
                 {
-                    string largerMatch;
-                    int lengthToRemove;
-
-                    if (charMatches[0].character.Length > charMatches[1].character.Length)
-                    {
-                        largerMatch = charMatches[0].character;
-                        lengthToRemove = charMatches[0].charLength;
-                    }
-                    else
-                    {
-                        largerMatch = charMatches[1].character;
-                        lengthToRemove = charMatches[1].charLength;
-                    }
-                                        
-                    listOfCharsIPA.Add(largerMatch);
-
-                    concat = concat.Remove(0, lengthToRemove);
-
-                }
-                else
-                {
-
-                    listOfCharsIPA.Add(charMatches[0].character);
-
-                    concat = concat.Remove(0, charMatches[0].charLength);
+                    byteMatch = true;
+                    goto finish;
                 }
 
             }
 
-            PhraseIPAList = listOfCharsIPA;
-            
-        }
+            if (SelectionOptions["AmbiguousVowels"] == true && AmbiguityRules.allVowels.Contains(phraseAsCharString))
+            {
+                if (mr.IsAmbiguousVowelMatch(phraseAsCharString, word))
+                {
+                    byteMatch = true;
+                    goto finish;
+                }
+            }
 
-        
+            byteMatch = phrase.SequenceEqual(word);
+
+            finish:;
+            return byteMatch;
+
+        }
     }
 }

@@ -21,9 +21,20 @@ namespace BlueBook.Model
             _dh = new DatabaseHelper();
         }
 
-        public DictionaryIPA GetData()
+        public List<string> WordsNotFoundInDB(string phrase)
         {
-            return _data;
+            List<string> wordList = IPAStringHelper.SplitWordsIntoList(phrase);
+            List<string> wordsNotInDB = new List<string>();
+
+            for (int i = 0; i < wordList.Count; i++)
+            {
+                if (!VerifyExistenceOfWord(wordList[i]))
+                {
+                    wordsNotInDB.Add(wordList[i]);
+                }
+            }
+
+            return wordsNotInDB;
         }
 
         public bool VerifyExistenceOfWord(string word)
@@ -183,7 +194,7 @@ namespace BlueBook.Model
             {
                 DictionaryIPA dipa = word;
 
-                List<byte[]> byteList = IPAStringHelper.GetByteListFromString(word.ipa1);
+                List<byte[]> byteList = IPAStringHelper.GetByteListFromIPAString(word.ipa1);
                 List<string>  stringList = IPAStringHelper.GetStringListFromByteList(byteList);
 
                 dipa.ipa2 = String.Concat(stringList);
@@ -196,6 +207,11 @@ namespace BlueBook.Model
         public int GetDataBaseCount()
         {
             return _dh.GetDataBaseCount();
+        }
+
+        public void AddNewDictionaryIPA(DictionaryIPA dipa)
+        {
+            _dh.InsertIntoDB(dipa);
         }
     }
 

@@ -13,11 +13,16 @@ namespace BlueBook.ViewModel
         public FinderWindow finderWindow { get; set; }
         public FindAmbiguityResultsCommand FindAmbiguityResultsCommand { get; set; }
 
+        public FindAmbiguityResultsWithoutLeadingWordsCommand FindAmbiguityResultsWithoutLeadingWordsCommand { get; set; }
+        public ShowAddWordWindowCommand ShowAddWordWindowCommand { get; set; }
+
         private string enteredPhrase;
 
         public FinderWindowViewModel()
         {
             FindAmbiguityResultsCommand = new FindAmbiguityResultsCommand(this);
+            FindAmbiguityResultsWithoutLeadingWordsCommand = new FindAmbiguityResultsWithoutLeadingWordsCommand(this);
+            ShowAddWordWindowCommand = new ShowAddWordWindowCommand(this);
         }
 
         public string EnteredPhrase
@@ -42,9 +47,9 @@ namespace BlueBook.ViewModel
             }
         }
 
-        private List<AmbiguityResults> ambiguityResults;
+        private AmbiguityResults ambiguityResults;
 
-        public List<AmbiguityResults> AmbiguityResults
+        public AmbiguityResults AmbiguityResults
         {
             get { return ambiguityResults; }
             set 
@@ -53,6 +58,107 @@ namespace BlueBook.ViewModel
                 OnPropertyChanged("AmbiguityResults");
             }
         }
+
+        private List<string> wordsNotFound;
+
+        public List<string> WordsNotFound
+        {
+            get { return wordsNotFound; }
+            set { wordsNotFound = value; }
+        }
+
+        private List<string> tempWordView = new List<string>();
+
+        public List<string> TempWordView
+        {
+            get { return tempWordView; }
+            set 
+            { 
+                tempWordView = value;
+                OnPropertyChanged("TempWordView");
+            }
+        }
+
+        private List<Result> results;
+
+        public List<Result> Results
+        {
+            get { return results; }
+            set 
+            { 
+                results = value;
+                OnPropertyChanged("Results");
+                //NumberOfResults = $"{Results.Count}";
+            }
+        }
+
+        private List<Result> leadingWords;
+
+        public List<Result> LeadingWords
+        {
+            get { return leadingWords; }
+            set 
+            { 
+                leadingWords = value;
+                OnPropertyChanged("LeadingWords");
+            }
+        }
+
+
+        private bool ambiguousConsonants;
+
+        public bool AmbiguousConsonants
+        {
+            get { return ambiguousConsonants; }
+            set 
+            { 
+                ambiguousConsonants = value;
+                OnPropertyChanged("AmbiguousConsonants");
+            }
+        }
+
+
+        private bool ambiguousVowels;
+
+        public bool AmbiguousVowels
+        {
+            get { return ambiguousVowels; }
+            set 
+            { 
+                ambiguousVowels = value;
+                OnPropertyChanged("AmbiguousVowels");
+            }
+        }
+
+
+
+
+        private string numberOfMatchedWords;
+
+        public string NumberOfMatchedWords
+        {
+            get { return numberOfMatchedWords; }
+            set 
+            { 
+                numberOfMatchedWords = value;
+                OnPropertyChanged("NumberOfMatchedWords");
+            }
+        }
+
+        private string numberOfResults = "";
+
+        public string NumberOfResults
+        {
+            get { return numberOfResults; }
+            set 
+            { 
+                numberOfResults = value;
+                OnPropertyChanged("NumberOfResults");
+            }
+        }
+
+
+
 
 
 

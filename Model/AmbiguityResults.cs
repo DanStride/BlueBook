@@ -14,11 +14,16 @@ namespace BlueBook.Model
             matchedWordList = matches;
         }
 
-        public void BuildResults()
+        public void BuildResults(int size)
         {
             // There is a total index size for the phrase
             // You need to build it like a grid
             // 
+            for (int i = 0; i < matchedWordList.Count; i++)
+            {
+
+            }
+
         }
 
 

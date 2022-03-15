@@ -11,8 +11,9 @@ namespace BlueBook.Helpers
     public class DatabaseHelper
     {
         //ISSUE: This CurrentDirectoryString is different for testing
-        //private string dbPath = ($"{Directory.GetCurrentDirectory()}\\DictionaryIPA.db");
-        private string dbPath = "H:\\2021 PROGRAMMING\\Blue Book\\source\\repos\\BlueBook\\bin\\Debug\\netcoreapp3.1\\DictionaryIPA.db";
+        private string dbPath = ($"{Directory.GetCurrentDirectory()}\\DictionaryIPA.db");
+        //private string dbPath = "H:\\2022 PROGRAMMING\\Blue Book\\source\\repos\\BlueBook\\bin\\Debug\\netcoreapp3.1\\DictionaryIPA.db";
+
 
         private SQLiteConnection _db;
 

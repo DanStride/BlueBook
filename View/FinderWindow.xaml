@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BlueBook.View"
         xmlns:vm="clr-namespace:BlueBook.ViewModel"
         mc:Ignorable="d"
-        Title="FinderWindow" Height="450" Width="800">
+        Title="FinderWindow" Height="900" Width="800">
     <Window.Resources>
         <vm:FinderWindowViewModel x:Key="vm" />
     </Window.Resources>
@@ -15,7 +15,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="140" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -47,8 +47,16 @@
             <TextBox x:Name="phraseInIPA"
                      Text="{Binding Path=PhraseInIPA}"/>
             <ListView Height="100"
+                      x:Name="matchesListView"
+                      ItemsSource="{Binding Path=TempWordView}">
+            </ListView>
+            <ListView Height="100"
+                      x:Name="leadingWordsListView"
+                      ItemsSource="{Binding Path=LeadingWords}"/>
+            <ListView Height="500"
                       x:Name="resultsListView"
-                      ItemsSource="{Binding Path=AmbiguityResults}">
+                      ItemsSource="{Binding Path=Results}">
+                
             </ListView>
 
         </StackPanel>
@@ -62,6 +70,30 @@
             <Button Content="Find"
                     x:Name="findButton"
                     Command="{Binding FindAmbiguityResultsCommand}"/>
+            <Button Content="Without Leading Words"
+                    x:Name="findWithoutLeadingWordsButton"
+                    Command="{Binding FindAmbiguityResultsWithoutLeadingWordsCommand}" />
+            <Label  Content="Ambiguity options:" />
+            
+            <CheckBox x:Name="amiguousConsonants"
+                      Content="All Consonants"
+                      IsChecked="{Binding AmbiguousConsonants, Mode=TwoWay}" />
+            <CheckBox x:Name="amiguousVowels"
+                      Content="All Vowels"
+                      IsChecked="{Binding AmbiguousVowels, Mode=TwoWay}" />
+
+            <Button Content="Add word"
+                    x:Name="addWordButton"
+                    Command="{Binding ShowAddWordWindowCommand}"/>
+            <Button x:Name="tempButton"
+                    Content="Temp Button"
+                    Click="tempButton_Click"    />
+            <Label Content="Matched Words:" />
+            <Label x:Name="matchedWordsLabel"
+                   Content="{Binding Path=NumberOfMatchedWords}" />
+            <Label Content="Results:" />
+            <Label x:Name="resultsLabel"
+                   Content="{Binding Path=NumberOfResults}" />
 
 
         </StackPanel>

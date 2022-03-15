@@ -36,6 +36,11 @@ namespace BlueBook.Model
 
         }
 
+        public override string ToString()
+        {
+            return Word.english;
+        }
+
 
     }
 }
