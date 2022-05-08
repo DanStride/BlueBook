@@ -4,10 +4,31 @@
              xmlns:local="clr-namespace:BlueBook"
              StartupUri="View/FinderWindow.xaml">
     <Application.Resources>
+
+        <SolidColorBrush x:Key="lightText"
+                         Color="#FFC1C1C1" />
+        <SolidColorBrush x:Key="backgroundDarkGrey"
+                         Color="#FF262729"/>
+        <SolidColorBrush x:Key="sideBarDarkGrey"
+                         Color="#FF212121" />
+        <SolidColorBrush x:Key="textBlue"
+                         Color="#FF6CAFC1" />
+
         <Style TargetType="Label"
                x:Key="PageHeader">
             <Setter Property="FontSize"
                     Value="30" />
         </Style>
+        
+        <Style TargetType="Label"
+               x:Key="pageLabels">
+            <Setter Property="Foreground"
+                    Value="#FFC1C1C1" />
+            <Setter Property="FontSize"
+                    Value="15" />
+            <Setter Property="FontFamily"
+                    Value="Malgun Gothic Semilight" />
+        </Style>
+
     </Application.Resources>
 </Application>

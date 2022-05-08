@@ -130,21 +130,6 @@ namespace BlueBook.ViewModel
             }
         }
 
-
-
-
-        private string numberOfMatchedWords;
-
-        public string NumberOfMatchedWords
-        {
-            get { return numberOfMatchedWords; }
-            set 
-            { 
-                numberOfMatchedWords = value;
-                OnPropertyChanged("NumberOfMatchedWords");
-            }
-        }
-
         private string numberOfResults = "";
 
         public string NumberOfResults

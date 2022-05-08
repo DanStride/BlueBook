@@ -632,5 +632,12 @@ namespace BlueBook.Model
 
         //    return byteMatch;
         //}
+
+        public string GetNumberOfResults()
+        {
+            int resultCount = (Results == null) ? 0 : Results.Count;
+
+            return resultCount.ToString();
+        }
     }
 }

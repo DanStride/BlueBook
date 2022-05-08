@@ -74,6 +74,7 @@ namespace BlueBook.ViewModel.Commands
 
                 VM.Results = rb.BuildResults();
                 VM.LeadingWords = rb.GetLeadingWords();
+                VM.NumberOfResults = rb.GetNumberOfResults();
 
 
                 foreach (var item in phrase.MatchedWords)

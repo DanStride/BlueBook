@@ -8,6 +8,7 @@ namespace BlueBook.ViewModel.Commands
 {
     public class FindAmbiguityResultsWithoutLeadingWordsCommand : ICommand
     {
+        // This is now doing nothing
         public FinderWindowViewModel VM { get; set; }
 
         public event EventHandler CanExecuteChanged

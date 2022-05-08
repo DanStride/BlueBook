@@ -22,56 +22,59 @@ namespace BlueBook.View
     public partial class FinderWindow : Window
     {
         public FinderWindowViewModel _vm;
+        public _DummyData _dummyData;
         public FinderWindow()
         {
             InitializeComponent();
             _vm = new FinderWindowViewModel();
+            _dummyData = new _DummyData();
             this.DataContext = _vm;
+            enteredPhraseTextBox.Focus();
         }
 
 
-        private void tempButton_Click(object sender, RoutedEventArgs e)
-        {
+        //private void tempButton_Click(object sender, RoutedEventArgs e)
+        //{
 
-            Encoding utf16 = Encoding.Unicode;
+        //    Encoding utf16 = Encoding.Unicode;
 
-            using (StreamWriter sr = new StreamWriter("C:\\Users\\DAN\\Desktop\\CharacterDetail.txt"))
-            {
-                foreach (var character in IPAlphabet.ipaChars)
-                {
-                    byte[] wordBytes = utf16.GetBytes(character.character);
+        //    using (StreamWriter sr = new StreamWriter("C:\\Users\\DAN\\Desktop\\CharacterDetail.txt"))
+        //    {
+        //        foreach (var character in IPAlphabet.ipaChars)
+        //        {
+        //            byte[] wordBytes = utf16.GetBytes(character.character);
 
-                    string byteString = "";
+        //            string byteString = "";
 
-                    for (int i = 0; i < wordBytes.Length; i++)
-                    {
-                        if (i == 0)
-                        {
-                            byteString = $"{wordBytes[i].ToString()}";
-                        }
-                        else
-                        {
-                            byteString = $"{byteString}, {wordBytes[i].ToString()}";
-                        }
-                    }
+        //            for (int i = 0; i < wordBytes.Length; i++)
+        //            {
+        //                if (i == 0)
+        //                {
+        //                    byteString = $"{wordBytes[i].ToString()}";
+        //                }
+        //                else
+        //                {
+        //                    byteString = $"{byteString}, {wordBytes[i].ToString()}";
+        //                }
+        //            }
 
-                    sr.WriteLine($"Char: {character.character}");
-                    sr.WriteLine($"unicodeBytesAsIntList = {{ {byteString} }},");
-                    sr.WriteLine($"CharId: {character.charId}");
-                    sr.WriteLine($"CharLength: {character.charLength}");
-                    sr.WriteLine($"CharType: {character.characterType}");
-                    sr.WriteLine($"VowelType: {character.vowelType}");
-                    sr.WriteLine($"VowelHeight: {character.vowelHeight}");
-                    sr.WriteLine($"VowelBackness: {character.vowelBackness}");
-                    sr.WriteLine($"VowelRoundedness: {character.vowelRoundedness}");
-                    sr.WriteLine($"ConsonantVoicing: {character.consonantVoicing}");
-                    sr.WriteLine($"ConsonantPlaceOfArticulation: {character.consonantPlaceOfArticulation}");
-                    sr.WriteLine($"ConsonantMannerOfArticulation: {character.consonantMannerOfArticulation}");
-                    sr.WriteLine("-");
-                }
-            }
+        //            sr.WriteLine($"Char: {character.character}");
+        //            sr.WriteLine($"unicodeBytesAsIntList = {{ {byteString} }},");
+        //            sr.WriteLine($"CharId: {character.charId}");
+        //            sr.WriteLine($"CharLength: {character.charLength}");
+        //            sr.WriteLine($"CharType: {character.characterType}");
+        //            sr.WriteLine($"VowelType: {character.vowelType}");
+        //            sr.WriteLine($"VowelHeight: {character.vowelHeight}");
+        //            sr.WriteLine($"VowelBackness: {character.vowelBackness}");
+        //            sr.WriteLine($"VowelRoundedness: {character.vowelRoundedness}");
+        //            sr.WriteLine($"ConsonantVoicing: {character.consonantVoicing}");
+        //            sr.WriteLine($"ConsonantPlaceOfArticulation: {character.consonantPlaceOfArticulation}");
+        //            sr.WriteLine($"ConsonantMannerOfArticulation: {character.consonantMannerOfArticulation}");
+        //            sr.WriteLine("-");
+        //        }
+        //    }
 
 
-        }
+        //}
     }
 }

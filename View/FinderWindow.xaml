@@ -6,100 +6,223 @@
         xmlns:local="clr-namespace:BlueBook.View"
         xmlns:vm="clr-namespace:BlueBook.ViewModel"
         mc:Ignorable="d"
-        Title="FinderWindow" Height="900" Width="800">
+        Title="Blue Book" Height="700" Width="1000" Background="#FF262729"
+        >
     <Window.Resources>
         <vm:FinderWindowViewModel x:Key="vm" />
     </Window.Resources>
 
+    <Window.InputBindings>
+        <KeyBinding Key="Enter"
+                    Command="{Binding FindAmbiguityResultsCommand}" />
+    </Window.InputBindings>
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="140" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="0"
-                    Grid.Row="0"
-                    Grid.ColumnSpan="1"
-                    Grid.RowSpan="3"
-                    Background="Gray">
-        </StackPanel>
 
         <Label Grid.Column="1"
                Grid.Row="0"
-               Content="Ambiguity Finder"
-               Style="{StaticResource PageHeader}">
-        </Label>
+               Content="Ambiguity Search"
+               Style="{StaticResource PageHeader}"
+               Foreground="#FFE7E7E7"
+               FontFamily="Malgun Gothic Semilight"
+               Margin="0,25,0,0"
+               FontSize="30"
+               FontWeight="Bold" />
+        
+        <TextBox x:Name="enteredPhraseTextBox"
+            Text="{Binding EnteredPhrase, UpdateSourceTrigger=PropertyChanged}"
+                 d:Text="enter phrase"
+            Background="#FFFBFBFB"
+                 HorizontalAlignment="Stretch" 
+                     Grid.Column="2"
+                 
+                     Grid.Row="0"
+                 Height="30"
+                 VerticalAlignment="Bottom"
+                 Margin="10,0,0,10"
+                 FontFamily="Malgun Gothic"
+                 FontSize="20"
+                 Foreground="#FF208AA7"
+                 Grid.ColumnSpan="2" />
 
         <StackPanel Grid.Column="1"
                     Grid.Row="1"
-                    Grid.ColumnSpan="1">
-            <Label Content="Type in a phrase:" />
-                <TextBox x:Name="enteredPhraseTextBox"
-                         Text="{Binding Path=EnteredPhrase}"
-                         MinWidth="200" />
-            <Label Content="IPA Chars:" />
-            <TextBox x:Name="phraseInIPA"
-                     Text="{Binding Path=PhraseInIPA}"/>
-            <ListView Height="100"
-                      x:Name="matchesListView"
-                      ItemsSource="{Binding Path=TempWordView}">
-            </ListView>
-            <ListView Height="100"
-                      x:Name="leadingWordsListView"
-                      ItemsSource="{Binding Path=LeadingWords}"/>
-            <ListView Height="500"
-                      x:Name="resultsListView"
-                      ItemsSource="{Binding Path=Results}">
-                
-            </ListView>
+                    Grid.ColumnSpan="3"
+                    Background="#FF3A3A3B">
 
+            <Label Content="IPA Characters:"
+                   Style="{StaticResource pageLabels}"
+                   Height="30"/>
+
+            <Label x:Name="ipaCharLabel"
+                   d:Content="chars"
+                   Style="{StaticResource pageLabels}"
+                   Content="{Binding Path=PhraseInIPA}"
+                   Height="30"
+                   Foreground="{StaticResource textBlue}" />
         </StackPanel>
 
-        <TextBox Grid.Column="1"
-                 Grid.Row="2"
-                 Text="Clipboard" />
+        <StackPanel Grid.Column="1"
+                    Grid.ColumnSpan="3"
+                    Grid.Row="2">
+            <Label Content="Potential Leading Words:"
+                   Style="{StaticResource pageLabels}"
+                   Background="{StaticResource backgroundDarkGrey}"
+                   Height="30"/>
+        </StackPanel>
 
-        <StackPanel Grid.Column="2"
-                    Grid.Row="1">
-            <Button Content="Find"
+        <StackPanel Grid.Column="1"
+                    Grid.ColumnSpan="3"
+                    Grid.Row="3">
+            <ListView     x:Name="leadingWordsListView"
+                          ItemsSource="{Binding Path=LeadingWords}"
+                          d:ItemsSource="{d:SampleData}"
+                          Background="#FF3A3A3B"
+                          Foreground="#FFFCFCFC"
+                          BorderBrush="#FF3A3A3B"
+                          Height="100">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding}"
+                                       FontFamily="Malgun Gothic Semilight"
+                                       FontSize="13"
+                                       Foreground="{StaticResource textBlue}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+        <Label Content="Results:"
+                   Style="{StaticResource pageLabels}"
+               Grid.Column="1"
+               Grid.ColumnSpan="3"
+               Grid.Row="4"
+               Background="{StaticResource backgroundDarkGrey}"
+               Height="30"/>
+
+
+
+        <ListView x:Name="resultsListView"
+                  ItemsSource="{Binding Path=Results, Mode=TwoWay}"
+                  d:ItemsSource="{d:SampleData}"
+                  Margin="0,0,0,10"
+                  Background="#FF3A3A3B"
+                  Foreground="#FFFCFCFC"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="3"
+                  Grid.Row="5"
+                  VerticalAlignment="Stretch"
+                  BorderBrush="#FF3A3A3B">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding}"
+                                   FontFamily="Malgun Gothic Semilight"
+                                   FontSize="13"
+                                   Foreground="{StaticResource textBlue}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackPanel Grid.Row="0"
+                    Grid.Column="4"
+                    Background="{StaticResource sideBarDarkGrey}">
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"
+                    Grid.Column="4"
+                    Background="{StaticResource sideBarDarkGrey}">
+            <Button Content="Search"
                     x:Name="findButton"
-                    Command="{Binding FindAmbiguityResultsCommand}"/>
-            <Button Content="Without Leading Words"
-                    x:Name="findWithoutLeadingWordsButton"
-                    Command="{Binding FindAmbiguityResultsWithoutLeadingWordsCommand}" />
-            <Label  Content="Ambiguity options:" />
-            
+                    Command="{Binding FindAmbiguityResultsCommand}"
+                    Margin="5,0,5,0"
+                    Background="#FF464B53"
+                    Foreground="#FFDEDEDE"
+                    FontFamily="Malgun Gothic"
+                    FontSize="20"
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Height="60" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2"
+                    Grid.Column="4"
+                    Background="{StaticResource sideBarDarkGrey}">
+        </StackPanel>
+
+        <StackPanel Grid.Row="3"
+                            Grid.Column="4"
+                    Background="{StaticResource sideBarDarkGrey}">
+            <Label  Content="Options:"
+                    Style="{StaticResource pageLabels}" 
+                        Margin="0,0,0,10" />
+
             <CheckBox x:Name="amiguousConsonants"
                       Content="All Consonants"
-                      IsChecked="{Binding AmbiguousConsonants, Mode=TwoWay}" />
+                      IsChecked="{Binding AmbiguousConsonants, Mode=TwoWay}"
+                      Foreground="#FFC1C1C1"
+                          Margin="2,0,0,0" />
             <CheckBox x:Name="amiguousVowels"
                       Content="All Vowels"
-                      IsChecked="{Binding AmbiguousVowels, Mode=TwoWay}" />
+                      IsChecked="{Binding AmbiguousVowels, Mode=TwoWay}"
+                      Foreground="#FFC1C1C1"
+                          Margin="2,5,0,0"/>
+                </StackPanel>
 
-            <Button Content="Add word"
-                    x:Name="addWordButton"
-                    Command="{Binding ShowAddWordWindowCommand}"/>
-            <Button x:Name="tempButton"
-                    Content="Temp Button"
-                    Click="tempButton_Click"    />
-            <Label Content="Matched Words:" />
-            <Label x:Name="matchedWordsLabel"
-                   Content="{Binding Path=NumberOfMatchedWords}" />
-            <Label Content="Results:" />
-            <Label x:Name="resultsLabel"
-                   Content="{Binding Path=NumberOfResults}" />
-
-
+        <StackPanel Grid.Row="4"
+                    Grid.Column="4"
+                    Background="{StaticResource sideBarDarkGrey}">
         </StackPanel>
 
-        <Button Content="Send to Editor"
-                Grid.Column="2"
-                Grid.Row="2" />
+        <StackPanel Grid.Row="5"
+                            Grid.Column="4"
+                    Background="{StaticResource sideBarDarkGrey}">
+
+            <Label Content="No. of Results:"
+                   Style="{StaticResource pageLabels}"/>
+            <Label x:Name="resultsLabel"
+                   Content="{Binding Path=NumberOfResults, Mode=TwoWay}"
+                   Foreground="{StaticResource lightText}"
+                   FontSize="15"
+                   Height="30"/>
+        </StackPanel>
+
+        <Button Content="Add word"
+                x:Name="addWordButton"
+                Command="{Binding ShowAddWordWindowCommand}"
+                Margin="5,7,5,10"
+                Background="#FF353A44"
+                FontFamily="Malgun Gothic"
+                Foreground="#FFDEDEDE"
+                FontSize="15"
+                VerticalAlignment="Bottom"
+                Grid.Row="5"
+                Grid.Column="4"
+                Height="30" />
+
+        <StackPanel Grid.Row="2"
+                            VerticalAlignment="Bottom">
+                    
+                </StackPanel>
     </Grid>
 </Window>
