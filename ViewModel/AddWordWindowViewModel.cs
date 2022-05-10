@@ -106,6 +106,7 @@ namespace BlueBook.ViewModel
 
         private void PopulateIPACharsList()
         {
+            // This is redundant
             foreach (var letter in IPAlphabet.ipaChars)
             {
                 ipaChars.Add(letter.character);

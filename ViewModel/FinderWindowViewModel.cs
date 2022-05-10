@@ -12,8 +12,6 @@ namespace BlueBook.ViewModel
     {
         public FinderWindow finderWindow { get; set; }
         public FindAmbiguityResultsCommand FindAmbiguityResultsCommand { get; set; }
-
-        public FindAmbiguityResultsWithoutLeadingWordsCommand FindAmbiguityResultsWithoutLeadingWordsCommand { get; set; }
         public ShowAddWordWindowCommand ShowAddWordWindowCommand { get; set; }
 
         private string enteredPhrase;
@@ -21,7 +19,6 @@ namespace BlueBook.ViewModel
         public FinderWindowViewModel()
         {
             FindAmbiguityResultsCommand = new FindAmbiguityResultsCommand(this);
-            FindAmbiguityResultsWithoutLeadingWordsCommand = new FindAmbiguityResultsWithoutLeadingWordsCommand(this);
             ShowAddWordWindowCommand = new ShowAddWordWindowCommand(this);
         }
 

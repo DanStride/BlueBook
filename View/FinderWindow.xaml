@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BlueBook.View"
         xmlns:vm="clr-namespace:BlueBook.ViewModel"
         mc:Ignorable="d"
-        Title="Blue Book" Height="700" Width="1000" Background="#FF262729"
+        Title="Blue Book" Height="700" Width="1000" Background="{StaticResource backgroundDarkGrey}"
         >
     <Window.Resources>
         <vm:FinderWindowViewModel x:Key="vm" />

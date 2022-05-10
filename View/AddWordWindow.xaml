@@ -6,38 +6,97 @@
         xmlns:local="clr-namespace:BlueBook.View"
         xmlns:vm="clr-namespace:BlueBook.ViewModel"
         mc:Ignorable="d"
-        Title="AddWordWindow" Height="300" Width="600">
+        Title="AddWordWindow" Height="580" Width="1000"
+        ResizeMode="NoResize"
+        Background="{StaticResource backgroundDarkGrey}">
     <Window.Resources>
         <vm:AddWordWindowViewModel x:Key="vm" />
     </Window.Resources>
     
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="20" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="20" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="12">
-            <Label Content="Add Word to Database"
-                   Style="{StaticResource PageHeader}" />
-            <Label Content="Word to add:" />
-            <TextBox x:Name="wordToAddTextBox"
-                     MinWidth="200" 
-                     Text="{Binding NewWord}" />
-            <Label Content="IPA characters for new word:" />
-            <TextBox x:Name="ipaCharsForNewWordTextBox"
-                     MinWidth="200" 
-                     Text="{Binding NewWordIPAString}"/>
-            <Button Content="Add"
-                    x:Name="addButton" 
-                    Width="50"
-                    Command="{Binding AddWordCommand}"/>
-            <TextBox x:Name="ipaCharsTextBox"
-                       Text="{Binding CharString}">
-            </TextBox>
-        </StackPanel>
-        <Grid Grid.Row="1">
+        
+        <Label Content="Add Word to Database"
+               Style="{StaticResource PageHeader}" 
+               Grid.Column="1"
+               Grid.Row="0"/>
+
+        <Grid Grid.Row="1"
+              Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Column="0"
+                        Grid.Row="0">
+                <Label Content="Word to add:"
+                       Style="{StaticResource pageLabels}"
+                       Height="35"
+                       FontSize="20"
+                       Margin="0,5,0,0" />
+                <TextBox x:Name="wordToAddTextBox"
+                         Text="{Binding NewWord}"
+                         d:Text="Test characters"
+                         Style="{StaticResource inputTextBox}"
+                         Height="40"
+                         Margin="0,0,5,0"
+                         FontSize="25" />
+                </StackPanel>
+            <StackPanel Grid.Column="0"
+                        Grid.Row="1">
+                <Label Content="IPA characters for new word:"
+                       Style="{StaticResource pageLabels}"
+                       Height="40"
+                       FontSize="20"
+                       Margin="0,5,0,0" />
+                <TextBox x:Name="ipaCharsForNewWordTextBox"
+                         Text="{Binding NewWordIPAString}"
+                         d:Text="Some more characters"
+                         Style="{StaticResource inputTextBox}"
+                         Height="35"
+                         Margin="0,0,5,0"
+                         FontSize="25" />
+            </StackPanel>
+
+                <Button Content="Add"
+                        x:Name="addButton"
+                        Command="{Binding AddWordCommand}"
+                        Grid.Column="1" 
+                        Grid.Row="0"
+                    Style="{StaticResource charButton}"
+                        Width="160"
+                    Margin="0,0,0,5.3" />
+                <Button x:Name="backSpace"
+                        Content="Backspace"
+                        CommandParameter="backspace"
+                        Command="{Binding AddWordCharacterSelectCommand}"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Style="{StaticResource charButton}"
+                        Width="160"
+                        HorizontalAlignment="Right"
+                    Margin="0,0,0,5" />
+        </Grid>
+
+        
+    
+        <Grid Grid.Row="2"
+              Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -53,319 +112,603 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Button x:Name="charId_1"
                     Grid.Column="0"
                     Grid.Row="0"
-                    Content="iː"
                     CommandParameter="iː"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        iː<LineBreak />sh<Underline>ee</Underline>p
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_2"
                     Grid.Column="1"
                     Grid.Row="0"
-                    Content="ɑː"
                     CommandParameter="ɑː"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɑː<LineBreak />f<Underline>ar</Underline>m
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_3"
                     Grid.Column="2"
                     Grid.Row="0"
-                    Content="uː"
                     CommandParameter="uː"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        uː<LineBreak />d<Underline>o</Underline>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_4"
                     Grid.Column="3"
                     Grid.Row="0"
-                    Content="ɔː"
                     CommandParameter="ɔː"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɔː<LineBreak />h<Underline>or</Underline>se
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_5"
                     Grid.Column="4"
                     Grid.Row="0"
-                    Content="ɜː"
                     CommandParameter="ɜː"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɜː<LineBreak />b<Underline>ir</Underline>d
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_6"
                     Grid.Column="5"
                     Grid.Row="0"
-                    Content="ɪ"
                     CommandParameter="ɪ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɪ<LineBreak />sh<Underline>i</Underline>p
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_7"
                     Grid.Column="6"
                     Grid.Row="0"
-                    Content="æ"
                     CommandParameter="æ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        æ<LineBreak />h<Underline>a</Underline>t
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_8"
                     Grid.Column="7"
                     Grid.Row="0"
-                    Content="ʊ"
                     CommandParameter="ʊ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ʊ<LineBreak />f<Underline>oo</Underline>t
+                    </TextBlock>
+                </Button.Content>
+                    
+            </Button>
+
+
+
             <Button x:Name="charId_9"
                     Grid.Column="8"
                     Grid.Row="0"
-                    Content="ɒ"
                     CommandParameter="ɒ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɒ<LineBreak />r<Underline>o</Underline>ck
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_10"
                     Grid.Column="9"
                     Grid.Row="0"
-                    Content="ʌ"
                     CommandParameter="ʌ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ʌ<LineBreak />c<Underline>u</Underline>p
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_11"
                     Grid.Column="10"
                     Grid.Row="0"
-                    Content="ɛ"
                     CommandParameter="ɛ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɛ<LineBreak />h<Underline>ea</Underline>d
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_12"
                     Grid.Column="11"
                     Grid.Row="0"
-                    Content="ə"
                     CommandParameter="ə"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
-            
-            
-            
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ə<LineBreak />tunn<Underline>e</Underline>l
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+
+
+
             <Button x:Name="charId_13"
                     Grid.Column="0"
                     Grid.Row="1"
-                    Content="b"
                     CommandParameter="b"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        b<LineBreak /><Underline>b</Underline>ook
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_14"
                     Grid.Column="1"
                     Grid.Row="1"
-                    Content="d"
                     CommandParameter="d"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        d<LineBreak /><Underline>d</Underline>ay
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_15"
                     Grid.Column="2"
                     Grid.Row="1"
-                    Content="ɡ"
                     CommandParameter="ɡ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɡ<LineBreak /><Underline>g</Underline>ive
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_16"
                     Grid.Column="3"
                     Grid.Row="1"
-                    Content="v"
                     CommandParameter="v"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        v<LineBreak /><Underline>v</Underline>ery
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_17"
                     Grid.Column="4"
                     Grid.Row="1"
-                    Content="ð"
                     CommandParameter="ð"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ð<LineBreak /><Underline>th</Underline>e
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_18"
                     Grid.Column="5"
                     Grid.Row="1"
-                    Content="z"
                     CommandParameter="z"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        z<LineBreak /><Underline>z</Underline>oo
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_19"
                     Grid.Column="6"
                     Grid.Row="1"
-                    Content="ʒ"
                     CommandParameter="ʒ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ʒ<LineBreak />vi<Underline>s</Underline>ion
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_20"
                     Grid.Column="7"
                     Grid.Row="1"
-                    Content="d‍ʒ"
                     CommandParameter="d‍ʒ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        d‍ʒ<LineBreak /><Underline>j</Underline>ump
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_21"
                     Grid.Column="8"
                     Grid.Row="1"
-                    Content="l"
                     CommandParameter="l"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        l<LineBreak /><Underline>l</Underline>ook
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_22"
                     Grid.Column="9"
                     Grid.Row="1"
-                    Content="ɹ"
                     CommandParameter="ɹ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɹ<LineBreak /><Underline>r</Underline>un
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_23"
                     Grid.Column="10"
                     Grid.Row="1"
-                    Content="j"
                     CommandParameter="j"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        j<LineBreak /><Underline>y</Underline>es
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_24"
                     Grid.Column="11"
                     Grid.Row="1"
-                    Content="w"
                     CommandParameter="w"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
-            
-            
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        w<LineBreak /><Underline>w</Underline>e
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+
+
 
             <Button x:Name="charId_25"
                     Grid.Column="0"
                     Grid.Row="2"
-                    Content="m"
                     CommandParameter="m"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        m<LineBreak /><Underline>m</Underline>oon
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_26"
                     Grid.Column="1"
                     Grid.Row="2"
-                    Content="n"
                     CommandParameter="n"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        n<LineBreak /><Underline>n</Underline>ame
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_27"
                     Grid.Column="2"
                     Grid.Row="2"
-                    Content="ŋ"
                     CommandParameter="ŋ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ŋ<LineBreak />si<Underline>ng</Underline>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_28"
                     Grid.Column="3"
                     Grid.Row="2"
-                    Content="p"
                     CommandParameter="p"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        p<LineBreak /><Underline>p</Underline>en
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_29"
                     Grid.Column="4"
                     Grid.Row="2"
-                    Content="t"
                     CommandParameter="t"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        t<LineBreak /><Underline>t</Underline>own
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_30"
                     Grid.Column="5"
                     Grid.Row="2"
-                    Content="k"
                     CommandParameter="k"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        k<LineBreak /><Underline>c</Underline>at
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_31"
                     Grid.Column="6"
                     Grid.Row="2"
-                    Content="f"
                     CommandParameter="f"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        f<LineBreak /><Underline>f</Underline>ish
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_32"
                     Grid.Column="7"
                     Grid.Row="2"
-                    Content="θ"
                     CommandParameter="θ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        θ<LineBreak /><Underline>th</Underline>ink
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_33"
                     Grid.Column="8"
                     Grid.Row="2"
-                    Content="s"
                     CommandParameter="s"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        s<LineBreak /><Underline>s</Underline>un
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_34"
                     Grid.Column="9"
                     Grid.Row="2"
-                    Content="ʃ"
                     CommandParameter="ʃ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ʃ<LineBreak /><Underline>sh</Underline>e
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_35"
                     Grid.Column="10"
                     Grid.Row="2"
-                    Content="tʃ"
                     CommandParameter="tʃ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        tʃ<LineBreak /><Underline>ch</Underline>eese
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_36"
                     Grid.Column="11"
                     Grid.Row="2"
-                    Content="e‍ɪ"
                     CommandParameter="e‍ɪ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
-            
-            
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        e‍ɪ<LineBreak />d<Underline>ay</Underline>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+
+
 
             <Button x:Name="charId_37"
                     Grid.Column="0"
                     Grid.Row="3"
-                    Content="a‍ɪ"
                     CommandParameter="a‍ɪ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        a‍ɪ<LineBreak /><Underline>eye</Underline>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_38"
                     Grid.Column="1"
                     Grid.Row="3"
-                    Content="ɔ‍ɪ"
                     CommandParameter="ɔ‍ɪ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɔ‍ɪ<LineBreak />b<Underline>oy</Underline>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_39"
                     Grid.Column="2"
                     Grid.Row="3"
-                    Content="a‍ʊ"
                     CommandParameter="a‍ʊ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        a‍ʊ<LineBreak />m<Underline>ou</Underline>th
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_40"
                     Grid.Column="3"
                     Grid.Row="3"
-                    Content="ə‍ʊ"
                     CommandParameter="ə‍ʊ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ə‍ʊ<LineBreak />n<Underline>o</Underline>se
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_41"
                     Grid.Column="4"
                     Grid.Row="3"
-                    Content="i‍ə"
                     CommandParameter="i‍ə"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        i‍ə<LineBreak /><Underline>ea</Underline>r
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_42"
                     Grid.Column="5"
                     Grid.Row="3"
-                    Content="e‍ə"
                     CommandParameter="e‍ə"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        e‍ə<LineBreak />h<Underline>ai</Underline>r
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_43"
                     Grid.Column="6"
                     Grid.Row="3"
-                    Content="h"
                     CommandParameter="h"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        h<LineBreak /><Underline>h</Underline>and
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_45"
                     Grid.Column="7"
                     Grid.Row="3"
-                    Content="i"
                     CommandParameter="i"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        i<LineBreak />happ<Underline>y</Underline>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_46"
                     Grid.Column="8"
                     Grid.Row="3"
-                    Content="ɐ"
                     CommandParameter="ɐ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɐ<LineBreak /><Underline>a</Underline>bate
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_47"
                     Grid.Column="9"
                     Grid.Row="3"
-                    Content="ɔ"
                     CommandParameter="ɔ"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        ɔ<LineBreak /><Underline>a</Underline>ll
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_48"
                     Grid.Column="10"
                     Grid.Row="3"
-                    Content="r"
                     CommandParameter="r"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        r<LineBreak /><Underline>r</Underline>un
+                    </TextBlock>
+                </Button.Content>
+            </Button>
             <Button x:Name="charId_49"
                     Grid.Column="11"
                     Grid.Row="3"
-                    Content="x"
                     CommandParameter="x"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
+                    Command="{Binding AddWordCharacterSelectCommand}"
+                    Style="{StaticResource charButton}">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center">
+                        x<LineBreak />ba<Underline>ch</Underline>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
 
 
-            <Button x:Name="backSpace"
-                    Grid.Column="10"
-                    Grid.ColumnSpan="2"
-                    Grid.Row="4"
-                    Content="Backspace"
-                    CommandParameter="backspace"
-                    Command="{Binding AddWordCharacterSelectCommand}" />
-
+            
 
 
         </Grid>
