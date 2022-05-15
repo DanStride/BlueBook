@@ -22,12 +22,10 @@ namespace BlueBook.View
     public partial class FinderWindow : Window
     {
         public FinderWindowViewModel _vm;
-        public _DummyData _dummyData;
         public FinderWindow()
         {
             InitializeComponent();
             _vm = new FinderWindowViewModel();
-            _dummyData = new _DummyData();
             this.DataContext = _vm;
             enteredPhraseTextBox.Focus();
         }

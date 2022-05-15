@@ -10,10 +10,10 @@ namespace BlueBook.Helpers
 {
     public class DatabaseHelper
     {
-        //ISSUE: This CurrentDirectoryString is different for testing
-        private string dbPath = ($"{Directory.GetCurrentDirectory()}\\DictionaryIPA.db");
-        //private string dbPath = "H:\\2022 PROGRAMMING\\Blue Book\\source\\repos\\BlueBook\\bin\\Debug\\netcoreapp3.1\\DictionaryIPA.db";
+        //private string dbPath = ($"{Directory.GetCurrentDirectory()}\\DictionaryIPA.db");
 
+        // Use this string for testing
+        private string dbPath = "C:\\MyRepos\\BlueBook\\_Database\\DictionaryIPA.db";
 
         private SQLiteConnection _db;
 
@@ -24,33 +24,16 @@ namespace BlueBook.Helpers
             _db = new SQLiteConnection(dbPath);
             _data = new DictionaryIPA();
             _db.CreateTable<DictionaryIPA>();
-            _db.CreateTable<DictionaryRelations>();
         }
 
         public DictionaryIPA ReturnSingleDBQuery(string query)
         {
-            _data = _db.Query<DictionaryIPA>(query).FirstOrDefault();
-
-            return _data;
+            return _db.Query<DictionaryIPA>($"SELECT * FROM DictionaryIPA WHERE English = '{query}'").FirstOrDefault();
         }
 
         public List<DictionaryIPA> GetEntireDBList()
         {
             return _db.Query<DictionaryIPA>("SELECT * FROM DictionaryIPA");
-        }
-
-        public void UpdateDBEntry(DictionaryIPA ipa)
-        {
-            _db.Update(ipa);
-        }
-
-        public List<DictionaryRelations> ReturnDictionaryRelationsList(string query)
-        {
-            List<DictionaryRelations> drelList = new List<DictionaryRelations>();
-
-            drelList = _db.Query<DictionaryRelations>(query);
-
-            return drelList;
         }
 
         public void InsertIntoDB(object DBEntry)
@@ -63,13 +46,14 @@ namespace BlueBook.Helpers
             return _db.Query<DictionaryIPA>("SELECT * FROM DictionaryIPA").LastOrDefault().id;
         }
 
-        public List<DictionaryIPA> GetListOfDictionaryIPA(string query)
+        public List<DictionaryIPA> GetListOfDictionaryIPA()
         {
-            List<DictionaryIPA> listIPA = new List<DictionaryIPA>();
+            return _db.Query<DictionaryIPA>("SELECT * FROM DictionaryIPA");
+        }
 
-            listIPA = _db.Query<DictionaryIPA>(query);
-
-            return listIPA;
+        public DictionaryIPA GetEntryByID(int id)
+        {
+            return _db.Query<DictionaryIPA>($"SELECT * FROM DictionaryIPA WHERE ID = '{id}'").FirstOrDefault();
         }
 
     }

@@ -1,14 +1,18 @@
-﻿using System;
+﻿using BlueBook.Model;
+using BlueBook.View;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
+using System.Timers;
 
 namespace BlueBook.ViewModel.Commands
 {
     public class AddWordCommand : ICommand
     {
         public AddWordWindowViewModel VM { get; set; }
-        // TODO: Get a list of any missing words from entered phrase and pass it into here to auto-populate
+        private DataRepo _dr;
 
         public event EventHandler CanExecuteChanged
         {
@@ -19,6 +23,7 @@ namespace BlueBook.ViewModel.Commands
         public AddWordCommand(AddWordWindowViewModel vm)
         {
             VM = vm;
+            _dr = new DataRepo();
         }
 
         public bool CanExecute(object parameter)
@@ -35,7 +40,24 @@ namespace BlueBook.ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            VM.AddNewWordToDataBase();
+            if (_dr.VerifyExistenceOfWord(VM.NewWord))
+            {
+                DisplayMessage($"{VM.NewWord} already exists in database.");
+            }
+            else
+            {
+                VM.AddNewWordToDataBase();
+                DisplayMessage($"{VM.NewWord} was added succesfully");
+            }
+        }
+
+        private void DisplayMessage(string message)
+        {
+            OneSecondMessageWindowViewModel messageWindowVM = new OneSecondMessageWindowViewModel(message);
+            OneSecondMessageWindow messageWindow = new OneSecondMessageWindow(messageWindowVM);
+
+            messageWindow.Show();
+            
         }
     }
 }

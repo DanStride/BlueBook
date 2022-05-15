@@ -46,7 +46,7 @@
                FontWeight="Bold" />
         
         <TextBox x:Name="enteredPhraseTextBox"
-            Text="{Binding EnteredPhrase, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding EnteredPhrase, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                  d:Text="enter phrase"
             Background="#FFFBFBFB"
                  HorizontalAlignment="Stretch" 

@@ -20,6 +20,7 @@ namespace BlueBook.ViewModel
         {
             FindAmbiguityResultsCommand = new FindAmbiguityResultsCommand(this);
             ShowAddWordWindowCommand = new ShowAddWordWindowCommand(this);
+            EnteredPhrase = "";
         }
 
         public string EnteredPhrase
@@ -44,17 +45,17 @@ namespace BlueBook.ViewModel
             }
         }
 
-        private AmbiguityResults ambiguityResults;
+        //private AmbiguityResults ambiguityResults;
 
-        public AmbiguityResults AmbiguityResults
-        {
-            get { return ambiguityResults; }
-            set 
-            { 
-                ambiguityResults = value;
-                OnPropertyChanged("AmbiguityResults");
-            }
-        }
+        //public AmbiguityResults AmbiguityResults
+        //{
+        //    get { return ambiguityResults; }
+        //    set 
+        //    { 
+        //        ambiguityResults = value;
+        //        OnPropertyChanged("AmbiguityResults");
+        //    }
+        //}
 
         private List<string> wordsNotFound;
 
@@ -138,15 +139,6 @@ namespace BlueBook.ViewModel
                 OnPropertyChanged("NumberOfResults");
             }
         }
-
-
-
-
-
-
-
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)

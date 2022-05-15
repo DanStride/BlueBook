@@ -30,7 +30,6 @@ namespace BlueBook.Helpers
 
         public static List<string> SplitWordsIntoList(string words)
         {
-            // TODO: FIX NULL INPUT (probably earlier than here)
             return words.Split(" ").ToList();
         }
 
@@ -42,9 +41,6 @@ namespace BlueBook.Helpers
             {
                 stringList.Add(utf16.GetString(byteset));
             }
-            
-
-
             return stringList;
         }
 
@@ -74,6 +70,24 @@ namespace BlueBook.Helpers
             if ((newList[0] == 13) && (newList[1] == 32))
             {
                 newList.RemoveRange(0, 2);
+            }
+
+            return newList;
+        }
+
+        public static List<byte[]> RemoveThirteenThirtyTwoFromByteList(List<byte[]> byteList)
+        {
+            List<byte[]> newList = byteList;
+
+            byte[] removeThisByte = { 13, 32 };
+
+            for (int i = 0; i < newList.Count; i++)
+            {
+                if (byteList[i].SequenceEqual(removeThisByte))
+                {
+                    newList.RemoveAt(i);
+                    i--;
+                }
             }
 
             return newList;
@@ -196,6 +210,20 @@ namespace BlueBook.Helpers
             wordBytes = utf16.GetBytes(charString);
 
             return wordBytes;
+        }
+
+        public static string ConvertPhraseToIPAChars(string phrase)
+        {
+            List<string> wordList = IPAStringHelper.SplitWordsIntoList(phrase);
+            List<DictionaryIPA> PhraseAsListOfDictionaryIPA = new List<DictionaryIPA>();
+            DataRepo _dr = new DataRepo();
+
+            for (int i = 0; i < wordList.Count; i++)
+            {
+                PhraseAsListOfDictionaryIPA.Add(_dr.GetSingleEntry(wordList[i]));
+            }
+
+            return GetIPAStringFromDictionaryIPAList(PhraseAsListOfDictionaryIPA);
         }
 
     }

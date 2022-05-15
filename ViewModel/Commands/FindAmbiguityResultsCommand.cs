@@ -1,5 +1,7 @@
 ﻿using BlueBook.Helpers;
+using BlueBook.Logic;
 using BlueBook.Model;
+using BlueBook.View;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,69 +29,25 @@ namespace BlueBook.ViewModel.Commands
 
         public bool CanExecute(object parameter)
         {
-            // CHECK ALL WORDS IN PHRASE ACTUALLY EXIST
-            // IF NOT, DISPLAY LIST OF WORDS NOT IN DB AND ASK IF USER WANTS TO ADD THEM
-
-            // NULL CHECKING
-
-            return true;
+            if (VM.EnteredPhrase.Length > 0)
+            { return true; }
+            else { return false; }
         }
 
         public void Execute(object parameter)
         {
-            List<string> wordsNotInDB = _dr.WordsNotFoundInDB(VM.EnteredPhrase);
-
-            if (wordsNotInDB.Count > 0)
-            {
-                // COULD UPDATE VM INSTEAD OF USING A MESSAGEBOX
-
-                string wordsNotFound = "";
-
-                foreach (var word in wordsNotInDB)
-                {
-                    wordsNotFound = $"{wordsNotFound}, {word}";
-                }
-
-                MessageBox.Show($"The following word(s): {wordsNotFound} were not found in the Database. Please add these words to Database and search again.");
-                goto finish;
-            }
-
+            if (CheckWordsExist().Count > 0) goto finish;
+                       
             Dictionary<string, bool> selections = PopulateSelectionsDictionary();
 
-            Phrase phrase = new Phrase(VM.EnteredPhrase, selections);
+            AmbiguitySearcher ambiguitySearcher = new AmbiguitySearcher(VM.EnteredPhrase, selections);
 
-            
+            ResultData resultData = ambiguitySearcher.ProcessAndReturnResults();
 
-            phrase.PopulatePhraseAsListOfDictionaryIPA();
-
-            VM.PhraseInIPA = IPAStringHelper.GetIPAStringFromDictionaryIPAList(phrase.PhraseAsListOfDictionaryIPA);
-
-            List<string> tempWordView = new List<string>();
-
-                // Run match algorithm
-                phrase.FindMatches();
-
-                // Build results
-                ResultsBuilder rb = new ResultsBuilder(phrase.MatchedWords, phrase.FinalIndex, VM.PhraseInIPA);
-
-                VM.Results = rb.BuildResults();
-                VM.LeadingWords = rb.GetLeadingWords();
-                VM.NumberOfResults = rb.GetNumberOfResults();
-
-
-                foreach (var item in phrase.MatchedWords)
-                {
-                    string indexing = "";
-
-                    for (int i = 0; i < item.Indexing.Count; i++)
-                    {
-                        indexing = $"{indexing}, {item.Indexing[i]}";
-                    }
-
-                    tempWordView.Add($"{item.Word.english}    {indexing}");
-                }
-
-                VM.TempWordView = tempWordView;
+            VM.PhraseInIPA = IPAStringHelper.ConvertPhraseToIPAChars(VM.EnteredPhrase);
+            VM.Results = resultData.Results;
+            VM.LeadingWords = resultData.LeadingWords;
+            VM.NumberOfResults = resultData.Results.Count.ToString();
 
         finish:;
         }
@@ -98,17 +56,32 @@ namespace BlueBook.ViewModel.Commands
         {
 
             Dictionary<string, bool> selectOptions = new Dictionary<string, bool>();
-
             if (VM.AmbiguousConsonants) selectOptions.Add("AmbiguousConsonants", true);
-
             if (!VM.AmbiguousConsonants) selectOptions.Add("AmbiguousConsonants", false);
-
             if (VM.AmbiguousVowels) selectOptions.Add("AmbiguousVowels", true);
-
             if (!VM.AmbiguousVowels) selectOptions.Add("AmbiguousVowels", false);
 
-
             return selectOptions;
+        }
+
+        private List<string> CheckWordsExist()
+        {
+            List<string> wordsNotInDB = _dr.WordsNotFoundInDB(VM.EnteredPhrase);
+
+            if (wordsNotInDB.Count > 0)
+            {
+                string wordsNotFound = "";
+
+                foreach (var word in wordsNotInDB)
+                {
+                    wordsNotFound = $"{wordsNotFound}, {word}";
+                }
+
+                MessageWindowViewModel mwvm = new MessageWindowViewModel(wordsNotInDB);
+                MessageWindow messageWindow = new MessageWindow(mwvm);
+                messageWindow.Show();
+            }
+            return wordsNotInDB;
         }
     }
 }

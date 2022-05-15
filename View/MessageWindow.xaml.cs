@@ -14,30 +14,29 @@ using System.Windows.Shapes;
 namespace BlueBook.View
 {
     /// <summary>
-    /// Interaction logic for AddWordWindow.xaml
+    /// Interaction logic for MessageWindow.xaml
     /// </summary>
-    public partial class AddWordWindow : Window
+    public partial class MessageWindow : Window
     {
-        public AddWordWindowViewModel _vm;
-        public AddWordWindow()
+        public MessageWindowViewModel _vm;
+
+        public MessageWindow(MessageWindowViewModel mwvm)
         {
             InitializeComponent();
-            _vm = new AddWordWindowViewModel();
+            _vm = mwvm;
             this.DataContext = _vm;
-            wordToAddTextBox.Focus();
         }
 
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        private void okButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            if (e.Key == Key.Return)
             {
                 this.Close();
-                
             }
         }
     }

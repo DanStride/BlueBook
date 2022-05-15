@@ -106,7 +106,6 @@ namespace BlueBook.ViewModel
 
         private void PopulateIPACharsList()
         {
-            // This is redundant
             foreach (var letter in IPAlphabet.ipaChars)
             {
                 ipaChars.Add(letter.character);
@@ -130,27 +129,11 @@ namespace BlueBook.ViewModel
 
         public void AddNewWordToDataBase()
         {
-            //Check to see if word already exists
-            if (_dr.VerifyExistenceOfWord(NewWord))
-            {
-                MessageBox.Show("Word already exists in DB");
-            }
-            else
-            {
-                //Build DictionaryIPA object
                 DictionaryIPA newIPA = new DictionaryIPA();
 
                 newIPA.english = NewWord;
                 newIPA.ipa1 = NewWordIPAString;
-
-
-                //Insert into DB
                 _dr.AddNewDictionaryIPA(newIPA);
-
-                //Inform user of success
-                MessageBox.Show($"{NewWord} was successfully added to the database!");
-            }
-
         }
     }
 }

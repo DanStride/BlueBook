@@ -8,9 +8,7 @@ namespace BlueBook.Model
     {
         public List<MatchedWord> result { get; set; }
 
-
         public bool isCompleteResult;
-
 
         public Result(Stack<MatchedWord> res)
         {
