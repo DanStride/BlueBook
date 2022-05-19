@@ -62,52 +62,6 @@ namespace BlueBook.Model
             return _data;
         }
 
-        //public string GetWordIPA(string word)
-        //{
-        //    _data = _dh.ReturnSingleDBQuery($"SELECT IPA1 FROM DictionaryIPA WHERE English = '{word}'");
-
-        //    return _data.ipa2.ToString();
-        //}
-                
-        //public int FindIndexOfWord (string word)
-        //{
-        //    DictionaryIPA dictionaryIPA = _dh.ReturnSingleDBQuery($"SELECT ID FROM DictionaryIPA WHERE English = '{word}'");
-
-        //    return dictionaryIPA.id;
-        //}
-
-        //public List<DictionaryIPA> GetListOfWords(string query)
-        //{
-        //    List<DictionaryIPA> listIPA = new List<DictionaryIPA>();
-
-        //    listIPA = _dh.GetListOfDictionaryIPA(query);
-
-        //    return listIPA;
-        //}
-
-        //public void FixDataBaseThirteenThirtytwoProblem()
-        //{
-        //    List<DictionaryIPA> listIPA = _dh.GetEntireDBList();
-
-        //    foreach (var word in listIPA)
-        //    {
-        //        DictionaryIPA dipa = word;
-
-        //        List<byte[]> byteList = IPAStringHelper.GetByteListFromIPAString(word.ipa1);
-        //        List<string>  stringList = IPAStringHelper.GetStringListFromByteList(byteList);
-
-        //        dipa.ipa2 = String.Concat(stringList);
-
-        //        _dh.UpdateDBEntry(dipa);
-        //    }
-
-        //}
-
-        //public int GetDataBaseCount()
-        //{
-        //    return _dh.GetDataBaseCount();
-        //}
-
         public void AddNewDictionaryIPA(DictionaryIPA dipa)
         {
             _dh.InsertIntoDB(dipa);

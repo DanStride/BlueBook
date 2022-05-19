@@ -10,10 +10,7 @@ namespace BlueBook.Helpers
 {
     public class DatabaseHelper
     {
-        //private string dbPath = ($"{Directory.GetCurrentDirectory()}\\DictionaryIPA.db");
-
-        // Use this string for testing
-        private string dbPath = "C:\\MyRepos\\BlueBook\\_Database\\DictionaryIPA.db";
+        private string dbPath = "";
 
         private SQLiteConnection _db;
 
@@ -21,6 +18,7 @@ namespace BlueBook.Helpers
 
         public DatabaseHelper()
         {
+            dbPath = GetDatabaseString();
             _db = new SQLiteConnection(dbPath);
             _data = new DictionaryIPA();
             _db.CreateTable<DictionaryIPA>();
@@ -54,6 +52,25 @@ namespace BlueBook.Helpers
         public DictionaryIPA GetEntryByID(int id)
         {
             return _db.Query<DictionaryIPA>($"SELECT * FROM DictionaryIPA WHERE ID = '{id}'").FirstOrDefault();
+        }
+
+        private string GetDatabaseString()
+        {
+            string path = Directory.GetCurrentDirectory();
+
+            for (int i = 0; i < 3; i++)
+            {
+                path = Directory.GetParent(path).FullName;
+            }
+
+            path = $"{path}\\_Database\\DictionaryIPA.db";
+
+            return path;
+        }
+
+        public void RemoveDatabaseEntry(int id)
+        {
+            _db.Query<DictionaryIPA>($"DELETE FROM DictionaryIPA WHERE ID = '{id}'");
         }
 
     }
