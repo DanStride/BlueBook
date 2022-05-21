@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BlueBook.ViewModel
 {
-    public class OneSecondMessageWindowViewModel
+    public class WordAddedWindowViewModel
     {
         private string message;
 
@@ -14,7 +14,7 @@ namespace BlueBook.ViewModel
             set { message = value; }
         }
 
-        public OneSecondMessageWindowViewModel(string message)
+        public WordAddedWindowViewModel(string message)
         {
             Message = message;
         }

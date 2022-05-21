@@ -19,6 +19,9 @@ namespace BlueBook.ViewModel
         public AddWordCharacterSelectCommand AddWordCharacterSelectCommand { get; set; }
         public AddWordCommand AddWordCommand { get; set; }
 
+        public delegate void ClickOption(string option);
+        public event ClickOption OnClickOption;
+
         private List<string> ipaChars = new List<string>();
 
         public List<string> IpaChars
@@ -88,11 +91,17 @@ namespace BlueBook.ViewModel
         {
             AddWordCharacterSelectCommand = new AddWordCharacterSelectCommand(this);
             AddWordCommand = new AddWordCommand(this);
+            AddWordCommand.OnClickOption += AddWordCommand_OnClickOption;
 
             _dr = new DataRepo();
 
             PopulateIPACharsList();
             CharString = String.Join("   ", IpaChars);
+        }
+
+        private void AddWordCommand_OnClickOption(string option)
+        {
+            OnClickOption(option);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

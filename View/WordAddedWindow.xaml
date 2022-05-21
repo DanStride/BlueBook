@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BlueBook.View"
         xmlns:vm="clr-namespace:BlueBook.ViewModel"
         mc:Ignorable="d"
-        Title="WordAddedWindow" Height="auto" Width="auto"
+        Title="WordAddedWindow" Height="150" Width="350"
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
@@ -14,43 +14,49 @@
     <Window.Resources>
         <vm:AddWordWindowViewModel x:Key="vm" />
     </Window.Resources>
-    
-    <Grid Background="{StaticResource midGrey}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-        </Grid.ColumnDefinitions>
-        <Label x:Name="messageLabel"
-               Content="Added succesfully"
-               Style="{StaticResource pageLabels}"
-               HorizontalAlignment="Center"
-               FontSize="20"
-               VerticalAlignment="Center"
-               Background="{StaticResource sideBarDarkGrey}"
-               Grid.Row="0"
-               Grid.Column="0"
-               Grid.ColumnSpan="2">
-            
-        </Label>
-        <Button Grid.Row="1"
-                Grid.Column="0"
-                Style="{StaticResource charButton}"
-                Width="160"
-                Content="Add another">
-                
-        </Button>
-        <Button Grid.Row="1"
-                Grid.Column="1"
-                Style="{StaticResource charButton}"
-                Width="160"
-                Content="Done"
-                Click="Button_Click">
 
-        </Button>
+    <Grid Background="{StaticResource backgroundDarkGrey}">
+        <Grid Background="{StaticResource sideBarDarkGrey}"
+              Margin="10,10,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Label x:Name="messageLabel"
+                   Content="Added succesfully"
+                   Style="{StaticResource pageLabels}"
+                   HorizontalAlignment="Center"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   Background="{StaticResource sideBarDarkGrey}"
+                   Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2">
 
+            </Label>
+            <Button x:Name="anotherButton"
+                Grid.Row="1"
+                    Grid.Column="0"
+                    Style="{StaticResource charButton}"
+                    Width="160"
+                    Content="Add another"
+                    Click="anotherButton_Click">
+
+            </Button>
+            <Button x:Name="doneButton" 
+                Grid.Row="1"
+                    Grid.Column="1"
+                    Style="{StaticResource charButton}"
+                    Width="160"
+                    Content="Done"
+                    Click="doneButton_Click">
+
+            </Button>
+
+        </Grid>
     </Grid>
 </Window>

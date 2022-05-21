@@ -14,6 +14,9 @@ namespace BlueBook.ViewModel.Commands
         public AddWordWindowViewModel VM { get; set; }
         private DataRepo _dr;
 
+        public delegate void ClickOption(string option);
+        public event ClickOption OnClickOption;
+
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
@@ -53,11 +56,18 @@ namespace BlueBook.ViewModel.Commands
 
         private void DisplayMessage(string message)
         {
-            OneSecondMessageWindowViewModel messageWindowVM = new OneSecondMessageWindowViewModel(message);
+            WordAddedWindowViewModel messageWindowVM = new WordAddedWindowViewModel(message);
             OneSecondMessageWindow messageWindow = new OneSecondMessageWindow(messageWindowVM);
+
+            messageWindow.OnClickOption += MessageWindow_OnClickOption;
 
             messageWindow.Show();
             
+        }
+
+        private void MessageWindow_OnClickOption(string option)
+        {
+            OnClickOption(option);
         }
     }
 }

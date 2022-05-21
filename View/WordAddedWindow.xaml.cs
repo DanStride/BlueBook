@@ -21,17 +21,27 @@ namespace BlueBook.View
     /// </summary>
     public partial class OneSecondMessageWindow : Window
     {
-        public OneSecondMessageWindowViewModel _vm;
+        public WordAddedWindowViewModel _vm;
 
-        public OneSecondMessageWindow(OneSecondMessageWindowViewModel vm)
+        public delegate void ClickOption(string option);
+        public event ClickOption OnClickOption;
+
+        public OneSecondMessageWindow(WordAddedWindowViewModel vm)
         {
             InitializeComponent();
             _vm = vm;
             this.DataContext = _vm;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void doneButton_Click(object sender, RoutedEventArgs e)
         {
+            OnClickOption("done");
+            this.Close();
+        }
+
+        private void anotherButton_Click(object sender, RoutedEventArgs e)
+        {
+            OnClickOption("another");
             this.Close();
         }
     }

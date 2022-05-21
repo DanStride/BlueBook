@@ -23,8 +23,25 @@ namespace BlueBook.View
         {
             InitializeComponent();
             _vm = new AddWordWindowViewModel();
+            _vm.OnClickOption += _vm_OnClickOption;
             this.DataContext = _vm;
             wordToAddTextBox.Focus();
+        }
+
+        private void _vm_OnClickOption(string option)
+        {
+            if (option == "done")
+            {
+                this.Close();
+            }
+            else if (option == "another")
+            {
+                _vm.IpaChars.Clear();
+                _vm.NewWordIPAList.Clear();
+                _vm.NewWord = "";
+                _vm.CharString = "";
+                _vm.NewWordIPAString = "";
+            }
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
