@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
+
 namespace BlueBook.ViewModel
 {
     public class FinderWindowViewModel : INotifyPropertyChanged
@@ -45,18 +46,6 @@ namespace BlueBook.ViewModel
             }
         }
 
-        //private AmbiguityResults ambiguityResults;
-
-        //public AmbiguityResults AmbiguityResults
-        //{
-        //    get { return ambiguityResults; }
-        //    set 
-        //    { 
-        //        ambiguityResults = value;
-        //        OnPropertyChanged("AmbiguityResults");
-        //    }
-        //}
-
         private List<string> wordsNotFound;
 
         public List<string> WordsNotFound
@@ -86,7 +75,6 @@ namespace BlueBook.ViewModel
             { 
                 results = value;
                 OnPropertyChanged("Results");
-                //NumberOfResults = $"{Results.Count}";
             }
         }
 
@@ -139,6 +127,19 @@ namespace BlueBook.ViewModel
                 OnPropertyChanged("NumberOfResults");
             }
         }
+
+        private string progress;
+
+        public string Progress
+        {
+            get { return progress; }
+            set 
+            { 
+                progress = value;
+                OnPropertyChanged("Progress");
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)

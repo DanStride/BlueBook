@@ -22,15 +22,6 @@ namespace BlueBook.Logic
             set { enteredPhrase = value; }
         }
 
-
-        private int finalIndex;
-        public int FinalIndex
-        {
-            get { return finalIndex; }
-            set { finalIndex = value; }
-        }
-
-
         public AmbiguitySearcher(string phrase, Dictionary<string, bool> selection)
         {
             selections = selection;
@@ -39,23 +30,25 @@ namespace BlueBook.Logic
             _rules = new MatchRules(selection);
         }
 
-        public ResultData ProcessAndReturnResults()
+        public ResultData ProcessAndReturnResults(SearchObject searchObject)
         {
 
-            List<DictionaryIPA> list = ConvertPhraseIntoListOfDictionaryIPA();
+            List<DictionaryIPA> list = ConvertPhraseIntoListOfDictionaryIPA(searchObject._phrase);
+
+            int finalIndex = GetFinalIndex(list);
 
             List<MatchedWord> matches = FindMatches(list);
 
             ResultBuilder resultBuilder = new ResultBuilder();
 
-            ResultData resultData = resultBuilder.BuildResults(matches, FinalIndex);
+            ResultData resultData = resultBuilder.BuildResults(matches, finalIndex);
 
             return resultData;
         }
 
-        public List<DictionaryIPA> ConvertPhraseIntoListOfDictionaryIPA()
+        public List<DictionaryIPA> ConvertPhraseIntoListOfDictionaryIPA(string phrase)
         {
-            List<string> wordList = IPAStringHelper.SplitWordsIntoList(enteredPhrase);
+            List<string> wordList = IPAStringHelper.SplitWordsIntoList(phrase);
             List<DictionaryIPA> dictionaryIPA = new List<DictionaryIPA>();
 
             for (int i = 0; i < wordList.Count; i++)
@@ -66,7 +59,22 @@ namespace BlueBook.Logic
             return dictionaryIPA;
         }
 
-        private List<MatchedWord> FindMatches(List<DictionaryIPA> dictionaryIPA)
+        public int GetFinalIndex(List<DictionaryIPA> list)
+        {
+            string ipaString = "";
+
+            foreach (var word in list)
+            {
+                ipaString = $"{ipaString}{String.Concat(IPAStringHelper.GetStringListFromString(word.ipa1))}";
+            }
+
+            List<byte[]> phraseBytes = IPAStringHelper.GetByteListFromIPAString(ipaString);
+            phraseBytes = IPAStringHelper.GetByteListFromIPAString(ipaString);
+
+            return phraseBytes.Count - 1;
+        }
+
+        public List<MatchedWord> FindMatches(List<DictionaryIPA> dictionaryIPA)
         {
             List<MatchedWord> matches = new List<MatchedWord>();
             List<DictionaryIPA> dbList = _dr.GetEntireDictionaryIPAList();
@@ -81,7 +89,6 @@ namespace BlueBook.Logic
             phraseBytes = IPAStringHelper.GetByteListFromIPAString(ipaString);
             List<byte[]> wordBytes = new List<byte[]>();
 
-            FinalIndex = phraseBytes.Count - 1;
 
             for (int i = 0; i < dbList.Count; i++)
             {

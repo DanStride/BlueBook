@@ -1,6 +1,7 @@
 ﻿using BlueBook.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace BlueBook.Logic
@@ -24,7 +25,16 @@ namespace BlueBook.Logic
             set { recursionDepth = value; }
         }
 
-        
+        public delegate void ProgressUpdate(int value);
+        public event ProgressUpdate OnProgressUpdate;
+
+        public void UpdateProgress(float index, float zeroListCount)
+        {
+            float valueFloat = (index / zeroListCount) * 100;
+
+            int value = (int)Math.Round(valueFloat);
+            OnProgressUpdate(value);
+        }
 
         public ResultData BuildResults(List<MatchedWord> matches, int finalIndex)
         {
@@ -67,6 +77,8 @@ namespace BlueBook.Logic
             }
             for (int i = 0; i < resultData.ZeroList.Count; i++)
             {
+                UpdateProgress(i, resultData.ZeroList.Count);
+
                 int recursionDepth = 0;
                 resultData.CurrentStack.Push(resultData.ZeroList[i]);
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.ComponentModel;
 
 namespace BlueBook.ViewModel.Commands
 {
@@ -14,6 +15,12 @@ namespace BlueBook.ViewModel.Commands
     {
         public FinderWindowViewModel VM { get; set; }
         private DataRepo _dr { get; set; }
+
+        private BackgroundWorker _worker;
+
+        private SearchObject searchObject;
+
+        ResultData rData;
 
         public event EventHandler CanExecuteChanged
         {
@@ -25,6 +32,59 @@ namespace BlueBook.ViewModel.Commands
         {
             VM = vm;
             _dr = new DataRepo();
+            
+            _worker = new BackgroundWorker();
+            _worker.DoWork += _worker_DoWork1;
+            _worker.RunWorkerCompleted += _worker_RunWorkerCompleted1;
+            rData = new ResultData();
+        }
+
+        private void _worker_RunWorkerCompleted1(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message);
+            }
+            else if (e.Cancelled)
+            {
+            }
+            else
+            {
+                rData = (ResultData)e.Result;
+                VM.PhraseInIPA = IPAStringHelper.ConvertPhraseToIPAChars(VM.EnteredPhrase);
+                VM.Results = rData.Results;
+                VM.LeadingWords = rData.LeadingWords;
+                VM.NumberOfResults = rData.Results.Count.ToString();
+                VM.Progress = "Complete";
+            }
+        }
+
+        private void _worker_DoWork1(object sender, DoWorkEventArgs e)
+        {
+
+
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            SearchObject searchObject = (SearchObject)e.Argument;
+
+            AmbiguitySearcher ambiguitySearcher = new AmbiguitySearcher(searchObject._phrase, searchObject._selections);
+
+            List<DictionaryIPA> list = ambiguitySearcher.ConvertPhraseIntoListOfDictionaryIPA(searchObject._phrase);
+
+            int finalIndex = ambiguitySearcher.GetFinalIndex(list);
+
+            List<MatchedWord> matches = ambiguitySearcher.FindMatches(list);
+
+            ResultBuilder resultBuilder = new ResultBuilder();
+            resultBuilder.OnProgressUpdate += ResultBuilder_OnProgressUpdate1;
+
+
+            e.Result = resultBuilder.BuildResults(matches, finalIndex);
+        }
+
+        private void ResultBuilder_OnProgressUpdate1(int value)
+        {
+            VM.Progress = $"{value}%";
         }
 
         public bool CanExecute(object parameter)
@@ -37,17 +97,12 @@ namespace BlueBook.ViewModel.Commands
         public void Execute(object parameter)
         {
             if (CheckWordsExist().Count > 0) goto finish;
-                       
-            Dictionary<string, bool> selections = PopulateSelectionsDictionary();
 
-            AmbiguitySearcher ambiguitySearcher = new AmbiguitySearcher(VM.EnteredPhrase, selections);
+            VM.Progress = "0%";
 
-            ResultData resultData = ambiguitySearcher.ProcessAndReturnResults();
+            searchObject = new SearchObject(PopulateSelectionsDictionary(), VM.EnteredPhrase);
 
-            VM.PhraseInIPA = IPAStringHelper.ConvertPhraseToIPAChars(VM.EnteredPhrase);
-            VM.Results = resultData.Results;
-            VM.LeadingWords = resultData.LeadingWords;
-            VM.NumberOfResults = resultData.Results.Count.ToString();
+            _worker.RunWorkerAsync(searchObject);
 
         finish:;
         }

@@ -142,10 +142,23 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <StackPanel Grid.Row="0"
-                    Grid.Column="4"
-                    Background="{StaticResource sideBarDarkGrey}">
-        </StackPanel>
+        <Grid Background="{StaticResource sideBarDarkGrey}"
+              Grid.Row="0"
+              Grid.Column="4">
+
+
+            <Label x:Name="progressPercent"
+                   Content="{Binding Path=Progress}"
+                   d:Content="0%"
+                   Style="{StaticResource pageLabels}"
+                   Background="{StaticResource sideBarDarkGrey}"
+                   VerticalAlignment="Bottom"
+                   Margin="0,0,0,10"
+                   HorizontalAlignment="Center"
+                   FontSize="23"/>
+
+
+        </Grid>
 
         <StackPanel Grid.Row="1"
                     Grid.Column="4"
