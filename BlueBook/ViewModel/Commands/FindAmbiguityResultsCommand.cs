@@ -34,12 +34,12 @@ namespace BlueBook.ViewModel.Commands
             _dr = new DataRepo();
             
             _worker = new BackgroundWorker();
-            _worker.DoWork += _worker_DoWork1;
-            _worker.RunWorkerCompleted += _worker_RunWorkerCompleted1;
+            _worker.DoWork += _worker_GetResults;
+            _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
             rData = new ResultData();
         }
 
-        private void _worker_RunWorkerCompleted1(object sender, RunWorkerCompletedEventArgs e)
+        private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
             {
@@ -59,7 +59,7 @@ namespace BlueBook.ViewModel.Commands
             }
         }
 
-        private void _worker_DoWork1(object sender, DoWorkEventArgs e)
+        private void _worker_GetResults(object sender, DoWorkEventArgs e)
         {
 
 
@@ -76,13 +76,13 @@ namespace BlueBook.ViewModel.Commands
             List<MatchedWord> matches = ambiguitySearcher.FindMatches(list);
 
             ResultBuilder resultBuilder = new ResultBuilder();
-            resultBuilder.OnProgressUpdate += ResultBuilder_OnProgressUpdate1;
+            resultBuilder.OnProgressUpdate += ResultBuilder_OnProgressUpdate;
 
 
             e.Result = resultBuilder.BuildResults(matches, finalIndex);
         }
 
-        private void ResultBuilder_OnProgressUpdate1(int value)
+        private void ResultBuilder_OnProgressUpdate(int value)
         {
             VM.Progress = $"{value}%";
         }

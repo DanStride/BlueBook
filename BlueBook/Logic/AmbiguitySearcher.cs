@@ -13,6 +13,7 @@ namespace BlueBook.Logic
         private Dictionary<string, bool> selections;
         private DataRepo _dr;
         private MatchRules _rules;
+        private AmbiguityRules _abiguityRules = new AmbiguityRules();
 
         private string enteredPhrase;
 
@@ -151,7 +152,7 @@ namespace BlueBook.Logic
 
             string phraseAsCharString = IPAStringHelper.GetStringFromByteArray(phrase);
 
-            if (selections["AmbiguousConsonants"] == true && AmbiguityRules.allConsonants.Contains(phraseAsCharString))
+            if (selections["AmbiguousConsonants"] == true && _abiguityRules.allConsonants.Contains(phraseAsCharString))
             {
                 if (_rules.IsAmbiguousConsonantMatch(phraseAsCharString, word))
                 {
@@ -160,7 +161,7 @@ namespace BlueBook.Logic
                 }
             }
 
-            if (selections["AmbiguousVowels"] == true && AmbiguityRules.allVowels.Contains(phraseAsCharString))
+            if (selections["AmbiguousVowels"] == true && _abiguityRules.allVowels.Contains(phraseAsCharString))
             {
                 if (_rules.IsAmbiguousVowelMatch(phraseAsCharString, word))
                 {

@@ -6,9 +6,9 @@ using System.Text;
 
 namespace BlueBook.Static_Classes
 {
-    public static class IPAlphabet
+    public class IPAlphabet
     {
-        public static readonly List<CharacterIPA> ipaChars = new List<CharacterIPA> {
+        public readonly List<CharacterIPA> ipaChars = new List<CharacterIPA> {
             new CharacterIPA
             {
                 character = "iː",
@@ -749,7 +749,7 @@ namespace BlueBook.Static_Classes
             }
         };
 
-        public static CharacterIPA ReturnCharacterIPAByCharacterString(string characterString)
+        public CharacterIPA ReturnCharacterIPAByCharacterString(string characterString)
         {
             var query = from c in ipaChars
                         where c.character == characterString

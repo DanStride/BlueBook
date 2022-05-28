@@ -13,6 +13,8 @@ namespace BlueBook.Helpers
     {
         public static Encoding utf16 = Encoding.Unicode;
 
+        private static IPAlphabet _ipa = new IPAlphabet();
+
         public static string CleanIPA(this string line)
         {
             while (line.Contains("ˈ"))
@@ -122,7 +124,7 @@ namespace BlueBook.Helpers
 
                 tempIPABytesInList = RemoveThirteenThirtyTwoFromBeginningOfIntList(tempIPABytesInList);
 
-                var characterMatches = from c in IPAlphabet.ipaChars
+                var characterMatches = from c in _ipa.ipaChars
                                        where c.unicodeBytesAsIntList[0] == tempIPABytesInList[0]
                                        orderby c.unicodeBytesAsIntList[0] descending
                                        select c;

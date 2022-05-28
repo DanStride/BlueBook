@@ -16,6 +16,8 @@ namespace BlueBook.ViewModel
 
         private DataRepo _dr;
 
+        private IPAlphabet _ipa = new IPAlphabet();
+
         public AddWordCharacterSelectCommand AddWordCharacterSelectCommand { get; set; }
         public AddWordCommand AddWordCommand { get; set; }
 
@@ -115,7 +117,7 @@ namespace BlueBook.ViewModel
 
         private void PopulateIPACharsList()
         {
-            foreach (var letter in IPAlphabet.ipaChars)
+            foreach (var letter in _ipa.ipaChars)
             {
                 ipaChars.Add(letter.character);
             }

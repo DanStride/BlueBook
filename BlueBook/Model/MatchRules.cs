@@ -14,6 +14,11 @@ namespace BlueBook.Model
 
         Dictionary<string, byte[]> allCharacterBytes = new Dictionary<string, byte[]>();
 
+        AmbiguityRules _ambiguityRules = new AmbiguityRules();
+
+        IPAlphabet _ipa = new IPAlphabet();
+
+
 
         // Consonants
         Dictionary<string, byte[]> ambiguousB_Rules = new Dictionary<string, byte[]>();
@@ -73,50 +78,50 @@ namespace BlueBook.Model
             allCharacterBytes = GetAllCharacterBytes();
 
             // Consonants
-            ambiguousT_Rules = GetAmbiguityRules(AmbiguityRules.T);
-            ambiguousF_Rules = GetAmbiguityRules(AmbiguityRules.F);
-            ambiguousB_Rules = GetAmbiguityRules(AmbiguityRules.B);
-            ambiguousD_Rules = GetAmbiguityRules(AmbiguityRules.D);
-            ambiguousG_Rules = GetAmbiguityRules(AmbiguityRules.G);
-            ambiguousV_Rules = GetAmbiguityRules(AmbiguityRules.V);
-            ambiguousTHe_Rules = GetAmbiguityRules(AmbiguityRules.THe);
-            ambiguousZ_Rules = GetAmbiguityRules(AmbiguityRules.Z);
-            ambiguousSJ_Rules = GetAmbiguityRules(AmbiguityRules.SJ);
-            ambiguousDJ_Rules = GetAmbiguityRules(AmbiguityRules.DJ);
-            ambiguousL_Rules = GetAmbiguityRules(AmbiguityRules.L);
-            ambiguousR_Rules = GetAmbiguityRules(AmbiguityRules.R);
-            ambiguousJ_Rules = GetAmbiguityRules(AmbiguityRules.J);
-            ambiguousW_Rules = GetAmbiguityRules(AmbiguityRules.W);
-            ambiguousM_Rules = GetAmbiguityRules(AmbiguityRules.M);
-            ambiguousN_Rules = GetAmbiguityRules(AmbiguityRules.N);
-            ambiguousNG_Rules = GetAmbiguityRules(AmbiguityRules.NG);
-            ambiguousP_Rules = GetAmbiguityRules(AmbiguityRules.P);
-            ambiguousK_Rules = GetAmbiguityRules(AmbiguityRules.K);
-            ambiguousTHink_Rules = GetAmbiguityRules(AmbiguityRules.THink);
-            ambiguousS_Rules = GetAmbiguityRules(AmbiguityRules.S);
-            ambiguousSH_Rules = GetAmbiguityRules(AmbiguityRules.SH);
-            ambiguousCH_Rules = GetAmbiguityRules(AmbiguityRules.CH);
+            ambiguousT_Rules = GetAmbiguityRules(_ambiguityRules.T);
+            ambiguousF_Rules = GetAmbiguityRules(_ambiguityRules.F);
+            ambiguousB_Rules = GetAmbiguityRules(_ambiguityRules.B);
+            ambiguousD_Rules = GetAmbiguityRules(_ambiguityRules.D);
+            ambiguousG_Rules = GetAmbiguityRules(_ambiguityRules.G);
+            ambiguousV_Rules = GetAmbiguityRules(_ambiguityRules.V);
+            ambiguousTHe_Rules = GetAmbiguityRules(_ambiguityRules.THe);
+            ambiguousZ_Rules = GetAmbiguityRules(_ambiguityRules.Z);
+            ambiguousSJ_Rules = GetAmbiguityRules(_ambiguityRules.SJ);
+            ambiguousDJ_Rules = GetAmbiguityRules(_ambiguityRules.DJ);
+            ambiguousL_Rules = GetAmbiguityRules(_ambiguityRules.L);
+            ambiguousR_Rules = GetAmbiguityRules(_ambiguityRules.R);
+            ambiguousJ_Rules = GetAmbiguityRules(_ambiguityRules.J);
+            ambiguousW_Rules = GetAmbiguityRules(_ambiguityRules.W);
+            ambiguousM_Rules = GetAmbiguityRules(_ambiguityRules.M);
+            ambiguousN_Rules = GetAmbiguityRules(_ambiguityRules.N);
+            ambiguousNG_Rules = GetAmbiguityRules(_ambiguityRules.NG);
+            ambiguousP_Rules = GetAmbiguityRules(_ambiguityRules.P);
+            ambiguousK_Rules = GetAmbiguityRules(_ambiguityRules.K);
+            ambiguousTHink_Rules = GetAmbiguityRules(_ambiguityRules.THink);
+            ambiguousS_Rules = GetAmbiguityRules(_ambiguityRules.S);
+            ambiguousSH_Rules = GetAmbiguityRules(_ambiguityRules.SH);
+            ambiguousCH_Rules = GetAmbiguityRules(_ambiguityRules.CH);
 
             //Vowels
-            ambiguousEE_Rules = GetAmbiguityRules(AmbiguityRules.EE);
-            ambiguousAR_Rules = GetAmbiguityRules(AmbiguityRules.AR);
-            ambiguousOO_Rules = GetAmbiguityRules(AmbiguityRules.OO);
-            ambiguousOR_Rules = GetAmbiguityRules(AmbiguityRules.OR);
-            ambiguousIR_Rules = GetAmbiguityRules(AmbiguityRules.IR);
-            ambiguousI_Rules = GetAmbiguityRules(AmbiguityRules.I);
-            ambiguousA_Rules = GetAmbiguityRules(AmbiguityRules.A);
-            ambiguousOOt_Rules = GetAmbiguityRules(AmbiguityRules.OOt);
-            ambiguousO_Rules = GetAmbiguityRules(AmbiguityRules.O);
-            ambiguousU_Rules = GetAmbiguityRules(AmbiguityRules.U);
-            ambiguousE_Rules = GetAmbiguityRules(AmbiguityRules.E);
-            ambiguousAH_Rules = GetAmbiguityRules(AmbiguityRules.AH);
-            ambiguousAY_Rules = GetAmbiguityRules(AmbiguityRules.AY);
-            ambiguousEYE_Rules = GetAmbiguityRules(AmbiguityRules.EYE);
-            ambiguousOY_Rules = GetAmbiguityRules(AmbiguityRules.OY);
-            ambiguousOU_Rules = GetAmbiguityRules(AmbiguityRules.OU);
-            ambiguousOWE_Rules = GetAmbiguityRules(AmbiguityRules.OWE);
-            ambiguousEAR_Rules = GetAmbiguityRules(AmbiguityRules.EAR);
-            ambiguousAIR_Rules = GetAmbiguityRules(AmbiguityRules.AIR);
+            ambiguousEE_Rules = GetAmbiguityRules(_ambiguityRules.EE);
+            ambiguousAR_Rules = GetAmbiguityRules(_ambiguityRules.AR);
+            ambiguousOO_Rules = GetAmbiguityRules(_ambiguityRules.OO);
+            ambiguousOR_Rules = GetAmbiguityRules(_ambiguityRules.OR);
+            ambiguousIR_Rules = GetAmbiguityRules(_ambiguityRules.IR);
+            ambiguousI_Rules = GetAmbiguityRules(_ambiguityRules.I);
+            ambiguousA_Rules = GetAmbiguityRules(_ambiguityRules.A);
+            ambiguousOOt_Rules = GetAmbiguityRules(_ambiguityRules.OOt);
+            ambiguousO_Rules = GetAmbiguityRules(_ambiguityRules.O);
+            ambiguousU_Rules = GetAmbiguityRules(_ambiguityRules.U);
+            ambiguousE_Rules = GetAmbiguityRules(_ambiguityRules.E);
+            ambiguousAH_Rules = GetAmbiguityRules(_ambiguityRules.AH);
+            ambiguousAY_Rules = GetAmbiguityRules(_ambiguityRules.AY);
+            ambiguousEYE_Rules = GetAmbiguityRules(_ambiguityRules.EYE);
+            ambiguousOY_Rules = GetAmbiguityRules(_ambiguityRules.OY);
+            ambiguousOU_Rules = GetAmbiguityRules(_ambiguityRules.OU);
+            ambiguousOWE_Rules = GetAmbiguityRules(_ambiguityRules.OWE);
+            ambiguousEAR_Rules = GetAmbiguityRules(_ambiguityRules.EAR);
+            ambiguousAIR_Rules = GetAmbiguityRules(_ambiguityRules.AIR);
 
             allVowel_Rules = GetAllVowel_Rules();
 
@@ -128,7 +133,7 @@ namespace BlueBook.Model
         {
             Dictionary<string, byte[]> allChars = new Dictionary<string, byte[]>();
 
-            foreach (var character in IPAlphabet.ipaChars)
+            foreach (var character in _ipa.ipaChars)
             {
                 int byteCount = utf16.GetByteCount(character.character);
 
@@ -155,9 +160,9 @@ namespace BlueBook.Model
 
             foreach (var character in ruleset)
             {
-                for (int i = 0; i < IPAlphabet.ipaChars.Count; i++)
+                for (int i = 0; i < _ipa.ipaChars.Count; i++)
                 {
-                    if (character == IPAlphabet.ipaChars[i].character) listCharIPA.Add(IPAlphabet.ipaChars[i]);
+                    if (character == _ipa.ipaChars[i].character) listCharIPA.Add(_ipa.ipaChars[i]);
                 }
             }
 
@@ -184,7 +189,7 @@ namespace BlueBook.Model
 
             List<CharacterIPA> listCharIPA = new List<CharacterIPA>();
 
-            foreach (var charIPA in IPAlphabet.ipaChars)
+            foreach (var charIPA in _ipa.ipaChars)
             {
                 if (charIPA.characterType == CharacterIPA.CharacterTypes.vowel) listCharIPA.Add(charIPA);
             }
