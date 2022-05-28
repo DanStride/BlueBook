@@ -10,16 +10,6 @@ namespace BlueBook.test
     [TestClass]
     public class AmbiguitySearcherTest
     {
-        [TestMethod]
-        public void ProcessAndReturnResults_ReturnsAResult()
-        {
-            AmbiguitySearcher searcher = new AmbiguitySearcher("cat", SetSelectionsFalse());
-
-            ResultData resultData = searcher.ProcessAndReturnResults();
-
-            Assert.IsNotNull(resultData);
-            Assert.IsTrue(resultData.Results.Count > 0);
-        }
 
         [TestMethod]
         public void ConvertPhraseIntoListOfDictionaryIPA_ReturnsCorrectResult()
@@ -27,7 +17,7 @@ namespace BlueBook.test
             AmbiguitySearcher searcher = new AmbiguitySearcher("cat fish bird", SetSelectionsFalse());
             List<string> expectedIPA = new List<string> { "kæt", "fɪʃ", "bɜːd" };
 
-            List<DictionaryIPA> actualIPA = searcher.ConvertPhraseIntoListOfDictionaryIPA();
+            List<DictionaryIPA> actualIPA = searcher.ConvertPhraseIntoListOfDictionaryIPA("cat fish bird");
 
             Assert.IsNotNull(actualIPA);
 

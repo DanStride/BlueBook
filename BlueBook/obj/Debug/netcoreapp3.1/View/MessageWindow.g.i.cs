@@ -62,7 +62,7 @@ namespace BlueBook.View {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/BlueBook;V1.0.0.0;component/view/messagewindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/BlueBook;component/view/messagewindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\View\MessageWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

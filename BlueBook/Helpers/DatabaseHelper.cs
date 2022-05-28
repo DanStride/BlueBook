@@ -68,9 +68,9 @@ namespace BlueBook.Helpers
             return path;
         }
 
-        public void RemoveDatabaseEntry(int id)
+        public void RemoveDatabaseEntryByWord(string word)
         {
-            _db.Query<DictionaryIPA>($"DELETE FROM DictionaryIPA WHERE ID = '{id}'");
+            _db.Query<DictionaryIPA>($"DELETE FROM DictionaryIPA WHERE ENGLISH = '{word}'").FirstOrDefault();
         }
 
     }

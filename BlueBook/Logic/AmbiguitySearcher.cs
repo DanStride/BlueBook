@@ -30,22 +30,6 @@ namespace BlueBook.Logic
             _rules = new MatchRules(selection);
         }
 
-        public ResultData ProcessAndReturnResults(SearchObject searchObject)
-        {
-
-            List<DictionaryIPA> list = ConvertPhraseIntoListOfDictionaryIPA(searchObject._phrase);
-
-            int finalIndex = GetFinalIndex(list);
-
-            List<MatchedWord> matches = FindMatches(list);
-
-            ResultBuilder resultBuilder = new ResultBuilder();
-
-            ResultData resultData = resultBuilder.BuildResults(matches, finalIndex);
-
-            return resultData;
-        }
-
         public List<DictionaryIPA> ConvertPhraseIntoListOfDictionaryIPA(string phrase)
         {
             List<string> wordList = IPAStringHelper.SplitWordsIntoList(phrase);

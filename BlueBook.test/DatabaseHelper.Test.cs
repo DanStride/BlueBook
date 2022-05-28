@@ -41,27 +41,33 @@ namespace BlueBook.test
         {
             int count = dh.GetDataBaseCount();
 
-            Assert.IsTrue(count > 65119);
+            Assert.IsTrue(count > 65000);
         }
 
         [TestMethod]
         // This test depends on GetDataBaseCount() and GetEntryByID()
-        public void InsertIntoDB_CheckEntryWasInserted()
+        public void InsertIntoDB_CheckEntryWasInserted_CheckEntryWasDeleted()
         {
-            int currentDBCount = dh.GetDataBaseCount();
-
+            // INSERT
             DictionaryIPA newEntry = new DictionaryIPA();
             newEntry.english = "TESTINSERT";
             newEntry.ipa1 = "ipachars";
 
             dh.InsertIntoDB(newEntry);
 
-            DictionaryIPA checkEntry = dh.GetEntryByID(currentDBCount + 1);
+            DictionaryIPA checkEntry = dh.ReturnSingleDBQuery("TESTINSERT");
 
             Assert.AreEqual(newEntry.english, checkEntry.english);
             Assert.AreEqual(newEntry.ipa1, checkEntry.ipa1);
 
-            dh.RemoveDatabaseEntry(currentDBCount + 1);
+            // REMOVE
+
+            dh.RemoveDatabaseEntryByWord("TESTINSERT");
+
+            DictionaryIPA nullEntry = dh.ReturnSingleDBQuery("TESTINSERT");
+
+            Assert.IsTrue(nullEntry == null);
+
         }
 
         [TestMethod]

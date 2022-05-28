@@ -14,10 +14,10 @@ namespace BlueBook
     /// </summary>
     public partial class App : Application
     {
-        //private void Application_Startup(Object sender, StartupEventArgs e)
-        //{
-        //    DictionaryWindow dictionaryWindow = new DictionaryWindow();
-        //    dictionaryWindow.Show();
-        //}
+        private void Application_Startup(Object sender, StartupEventArgs e)
+        {
+            FinderWindow dictionaryWindow = new FinderWindow();
+            dictionaryWindow.Show();
+        }
     }
 }
