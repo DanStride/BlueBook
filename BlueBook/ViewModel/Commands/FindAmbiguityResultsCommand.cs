@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.ComponentModel;
+using Serilog;
 
 namespace BlueBook.ViewModel.Commands
 {
@@ -39,6 +40,50 @@ namespace BlueBook.ViewModel.Commands
             rData = new ResultData();
         }
 
+        public bool CanExecute(object parameter)
+        {
+            if (VM.EnteredPhrase.Length > 0)
+            { return true; }
+            else { return false; }
+        }
+
+        public void Execute(object parameter)
+        {
+            if (CheckWordsExist().Count > 0) goto finish;
+
+            VM.Progress = "0%";
+
+            searchObject = new SearchObject(PopulateSelectionsDictionary(), VM.EnteredPhrase);
+            Log.Logger.Information($"Start search for {VM.EnteredPhrase}");
+
+            _worker.RunWorkerAsync(searchObject);
+
+        finish:;
+        }
+
+        private void _worker_GetResults(object sender, DoWorkEventArgs e)
+        {
+
+
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            SearchObject searchObject = (SearchObject)e.Argument;
+
+            AmbiguitySearcher ambiguitySearcher = new AmbiguitySearcher(searchObject._phrase, searchObject._selections);
+
+            List<DictionaryIPA> list = ambiguitySearcher.ConvertPhraseIntoListOfDictionaryIPA(searchObject._phrase);
+
+            int phraseLength = ambiguitySearcher.GetLengthOfPhrase(list);
+
+            List<MatchedWord> matches = ambiguitySearcher.FindMatches(list);
+
+            ResultBuilder resultBuilder = new ResultBuilder(list);
+            resultBuilder.OnProgressUpdate += ResultBuilder_OnProgressUpdate;
+
+
+            e.Result = resultBuilder.BuildResults(matches, phraseLength);
+        }
+
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
@@ -59,53 +104,14 @@ namespace BlueBook.ViewModel.Commands
             }
         }
 
-        private void _worker_GetResults(object sender, DoWorkEventArgs e)
-        {
-
-
-            BackgroundWorker worker = sender as BackgroundWorker;
-
-            SearchObject searchObject = (SearchObject)e.Argument;
-
-            AmbiguitySearcher ambiguitySearcher = new AmbiguitySearcher(searchObject._phrase, searchObject._selections);
-
-            List<DictionaryIPA> list = ambiguitySearcher.ConvertPhraseIntoListOfDictionaryIPA(searchObject._phrase);
-
-            int finalIndex = ambiguitySearcher.GetFinalIndex(list);
-
-            List<MatchedWord> matches = ambiguitySearcher.FindMatches(list);
-
-            ResultBuilder resultBuilder = new ResultBuilder();
-            resultBuilder.OnProgressUpdate += ResultBuilder_OnProgressUpdate;
-
-
-            e.Result = resultBuilder.BuildResults(matches, finalIndex);
-        }
+        
 
         private void ResultBuilder_OnProgressUpdate(int value)
         {
             VM.Progress = $"{value}%";
         }
 
-        public bool CanExecute(object parameter)
-        {
-            if (VM.EnteredPhrase.Length > 0)
-            { return true; }
-            else { return false; }
-        }
-
-        public void Execute(object parameter)
-        {
-            if (CheckWordsExist().Count > 0) goto finish;
-
-            VM.Progress = "0%";
-
-            searchObject = new SearchObject(PopulateSelectionsDictionary(), VM.EnteredPhrase);
-
-            _worker.RunWorkerAsync(searchObject);
-
-        finish:;
-        }
+        
 
         private Dictionary<string, bool> PopulateSelectionsDictionary()
         {

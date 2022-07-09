@@ -44,7 +44,7 @@ namespace BlueBook.Logic
             return dictionaryIPA;
         }
 
-        public int GetFinalIndex(List<DictionaryIPA> list)
+        public int GetLengthOfPhrase(List<DictionaryIPA> list)
         {
             string ipaString = "";
 
@@ -54,7 +54,6 @@ namespace BlueBook.Logic
             }
 
             List<byte[]> phraseBytes = IPAStringHelper.GetByteListFromIPAString(ipaString);
-            phraseBytes = IPAStringHelper.GetByteListFromIPAString(ipaString);
 
             return phraseBytes.Count - 1;
         }

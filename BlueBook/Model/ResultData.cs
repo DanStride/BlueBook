@@ -12,7 +12,7 @@ namespace BlueBook.Model
         public List<MatchedWord> ZeroList;
         public List<Result> LeadingWords;
         public int currentIndex;
-        public int FinalIndex;
+        public int PhraseLength;
 
         public ResultData()
         {
@@ -22,7 +22,7 @@ namespace BlueBook.Model
             ZeroList = new List<MatchedWord>();
             LeadingWords = new List<Result>();
             currentIndex = 0;
-            FinalIndex = 0;
+            PhraseLength = 0;
         }
     }
 }

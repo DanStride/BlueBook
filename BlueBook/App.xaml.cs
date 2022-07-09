@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.IO;
 
 namespace BlueBook
 {
@@ -16,6 +17,7 @@ namespace BlueBook
     {
         private void Application_Startup(Object sender, StartupEventArgs e)
         {
+            
             FinderWindow dictionaryWindow = new FinderWindow();
             dictionaryWindow.Show();
         }
